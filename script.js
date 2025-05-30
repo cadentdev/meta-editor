@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveButton = document.getElementById('save-button');
     const clearButton = document.getElementById('clear-button');
     const markdownUpload = document.getElementById('markdown-upload');
+    const saveHeaderTemplateBtn = document.getElementById('save-header-template');
+    const loadHeaderTemplateBtn = document.getElementById('load-header-template');
+    const saveFooterTemplateBtn = document.getElementById('save-footer-template');
+    const loadFooterTemplateBtn = document.getElementById('load-footer-template');
 
     // Validation messages
     const filenameValidation = document.getElementById('filename-validation');
@@ -54,6 +58,12 @@ document.addEventListener('DOMContentLoaded', () => {
     saveButton.addEventListener('click', saveToLocalStorage);
     clearButton.addEventListener('click', clearEditor);
     markdownUpload.addEventListener('change', handleMarkdownUpload);
+    
+    // Template button event listeners
+    saveHeaderTemplateBtn.addEventListener('click', saveHeaderTemplate);
+    loadHeaderTemplateBtn.addEventListener('click', loadHeaderTemplate);
+    saveFooterTemplateBtn.addEventListener('click', saveFooterTemplate);
+    loadFooterTemplateBtn.addEventListener('click', loadFooterTemplate);
 
     // Update preview when any input changes
     const allInputs = [filenameInput, titleInput, dateInput, summaryInput, headerInput, contentInput, footerInput, imageAltInput];
@@ -61,8 +71,73 @@ document.addEventListener('DOMContentLoaded', () => {
         input.addEventListener('input', updatePreview);
     });
 
+    // Load default templates if available
+    checkForDefaultTemplates();
+    
     // Initial preview update
     updatePreview();
+    
+    // Template functions
+    function saveHeaderTemplate() {
+        const headerContent = headerInput.value.trim();
+        if (headerContent) {
+            localStorage.setItem('metaEditorHeaderTemplate', headerContent);
+            alert('Header template saved as default!');
+        } else {
+            if (confirm('Header is empty. Do you want to clear the default header template?')) {
+                localStorage.removeItem('metaEditorHeaderTemplate');
+                alert('Default header template cleared.');
+            }
+        }
+    }
+    
+    function loadHeaderTemplate() {
+        const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
+        if (savedHeader) {
+            headerInput.value = savedHeader;
+            updatePreview();
+        } else {
+            alert('No default header template found.');
+        }
+    }
+    
+    function saveFooterTemplate() {
+        const footerContent = footerInput.value.trim();
+        if (footerContent) {
+            localStorage.setItem('metaEditorFooterTemplate', footerContent);
+            alert('Footer template saved as default!');
+        } else {
+            if (confirm('Footer is empty. Do you want to clear the default footer template?')) {
+                localStorage.removeItem('metaEditorFooterTemplate');
+                alert('Default footer template cleared.');
+            }
+        }
+    }
+    
+    function loadFooterTemplate() {
+        const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
+        if (savedFooter) {
+            footerInput.value = savedFooter;
+            updatePreview();
+        } else {
+            alert('No default footer template found.');
+        }
+    }
+    
+    function checkForDefaultTemplates() {
+        // Check if we should auto-load default templates
+        const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
+        const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
+        
+        // Only auto-load if the fields are empty
+        if (savedHeader && !headerInput.value.trim()) {
+            headerInput.value = savedHeader;
+        }
+        
+        if (savedFooter && !footerInput.value.trim()) {
+            footerInput.value = savedFooter;
+        }
+    }
 
     // Validation functions
     function validateTitle() {
@@ -359,7 +434,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Extract frontmatter and content
                 const frontmatterText = match[1];
-                const mainContent = content.replace(frontmatterRegex, '');
+                let mainContent = content.replace(frontmatterRegex, '');
                 
                 // Parse YAML frontmatter
                 const frontmatter = jsyaml.load(frontmatterText);
@@ -410,6 +485,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     validateSummary();
                 }
                 
+                // Try to identify header and footer content
+                const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
+                const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
+                
+                // Check for header match at the beginning of content
+                if (savedHeader && mainContent.trim().startsWith(savedHeader.trim())) {
+                    headerInput.value = savedHeader;
+                    // Remove header from content
+                    mainContent = mainContent.trim().substring(savedHeader.trim().length).trim();
+                }
+                
+                // Check for footer match at the end of content
+                if (savedFooter && mainContent.trim().endsWith(savedFooter.trim())) {
+                    footerInput.value = savedFooter;
+                    // Remove footer from content
+                    mainContent = mainContent.trim().substring(0, mainContent.trim().length - savedFooter.trim().length).trim();
+                }
+                
                 // Set content
                 contentInput.value = mainContent.trim();
                 
@@ -423,7 +516,27 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             // No frontmatter found, just set the content
-            contentInput.value = content.trim();
+            let mainContent = content.trim();
+            
+            // Try to identify header and footer content
+            const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
+            const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
+            
+            // Check for header match at the beginning of content
+            if (savedHeader && mainContent.startsWith(savedHeader.trim())) {
+                headerInput.value = savedHeader;
+                // Remove header from content
+                mainContent = mainContent.substring(savedHeader.trim().length).trim();
+            }
+            
+            // Check for footer match at the end of content
+            if (savedFooter && mainContent.endsWith(savedFooter.trim())) {
+                footerInput.value = savedFooter;
+                // Remove footer from content
+                mainContent = mainContent.substring(0, mainContent.length - savedFooter.trim().length).trim();
+            }
+            
+            contentInput.value = mainContent;
             updatePreview();
             alert('No YAML frontmatter found. Content has been added to the editor.');
         }

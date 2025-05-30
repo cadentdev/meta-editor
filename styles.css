@@ -54,6 +54,24 @@ h2 {
     margin-bottom: 15px;
 }
 
+.template-actions {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 5px;
+}
+
+.template-button {
+    padding: 3px 8px;
+    font-size: 12px;
+    background-color: #7f8c8d;
+    border-radius: 3px;
+    color: white;
+}
+
+.template-button:hover {
+    background-color: #6c7a7d;
+}
+
 label {
     display: block;
     margin-bottom: 5px;
