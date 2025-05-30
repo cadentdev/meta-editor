@@ -67,3 +67,24 @@ A web-based editor that prepares a post for publication on the web by adding ess
 ## Getting Started
 
 Simply open `index.html` in your web browser to start using the editor. No server setup or installation required.
+
+## Field Details
+
+### File Name
+The File Name field accepts lowercase names with hyphens as separators. This ensures your markdown files follow best practices for web publishing. The field is used for:
+- Tracking which document you're working on
+- Validating proper filename format
+- Determining the filename when downloading
+
+### Hero Image
+The hero image system supports two workflows:
+1. **Direct Upload**: Select an image file to upload and preview
+2. **Markdown Extraction**: When uploading a markdown file, the first image is automatically extracted
+
+The Image File Name field shows the current image filename and is used when generating the markdown code in the preview.
+
+### Templates
+Header and footer templates are stored separately from your documents, allowing you to:
+- Maintain consistent branding across multiple posts
+- Quickly apply standard introductions or contact information
+- Update all future documents by changing the template once
