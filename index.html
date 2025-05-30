@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meta Editor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Meta Editor</h1>
+        
+        <div class="editor-container">
+            <div class="input-section">
+                <h2>Frontmatter</h2>
+                
+                <div class="form-group">
+                    <label for="filename">File Name</label>
+                    <input type="text" id="filename" placeholder="Enter file name..." maxlength="100">
+                    <span class="validation-message" id="filename-validation"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="title">Title</label>
+                    <input type="text" id="title" placeholder="Enter title..." maxlength="100">
+                    <span class="validation-message" id="title-validation"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="datetime-local" id="date">
+                    <span class="validation-message" id="date-validation"></span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tags">Tags</label>
+                    <div class="tags-input-container">
+                        <input type="text" id="tags-input" placeholder="Add tags...">
+                        <div id="tags-container" class="tags-container"></div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="summary">Summary</label>
+                    <textarea id="summary" placeholder="Enter summary..." rows="3" maxlength="250"></textarea>
+                    <span class="validation-message" id="summary-validation"></span>
+                    <span class="char-count" id="summary-count">0/250</span>
+                </div>
+                
+                <div class="form-group">
+                    <label for="hero-image">Hero Image</label>
+                    <input type="file" id="hero-image" accept="image/*">
+                    <div id="image-preview-container" class="image-preview-container hidden">
+                        <img id="image-preview" src="" alt="">
+                        <button id="remove-image" class="remove-button">Remove</button>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="image-alt">Image Alt Text</label>
+                    <input type="text" id="image-alt" placeholder="Describe the image...">
+                </div>
+                
+                <div class="form-group">
+                    <div class="field-with-actions">
+                        <label for="header">Header Text</label>
+                        <div class="template-actions">
+                            <button id="save-header-template" class="template-button" title="Save as Default Header">Save Default</button>
+                            <button id="load-header-template" class="template-button" title="Load Default Header">Load Default</button>
+                        </div>
+                    </div>
+                    <textarea id="header" placeholder="Enter header content..." rows="3"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="content">Content</label>
+                    <textarea id="content" placeholder="Enter markdown content..." rows="10"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <div class="field-with-actions">
+                        <label for="footer">Footer</label>
+                        <div class="template-actions">
+                            <button id="save-footer-template" class="template-button" title="Save as Default Footer">Save Default</button>
+                            <button id="load-footer-template" class="template-button" title="Load Default Footer">Load Default</button>
+                        </div>
+                    </div>
+                    <textarea id="footer" placeholder="Enter footer content..." rows="3"></textarea>
+                </div>
+            </div>
+            
+            <div class="preview-section">
+                <h2>Preview</h2>
+                <div class="preview-actions">
+                    <button id="copy-button">Copy to Clipboard</button>
+                </div>
+                <div id="preview" class="preview-content"></div>
+            </div>
+        </div>
+        
+        <div class="actions">
+            <button id="save-button">Save</button>
+            <button id="clear-button">Clear</button>
+            <div class="file-upload">
+                <label for="markdown-upload">Upload Markdown File</label>
+                <input type="file" id="markdown-upload" accept=".md,.markdown,.txt">
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

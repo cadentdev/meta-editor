@@ -1,0 +1,345 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+h2 {
+    color: #3498db;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.editor-container {
+    display: flex;
+    gap: 20px;
+}
+
+.input-section {
+    flex: 1;
+    padding-right: 20px;
+}
+
+.preview-section {
+    flex: 1;
+    border-left: 1px solid #eee;
+    padding-left: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.field-with-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.template-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.template-button {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    padding: 3px 8px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.template-button:hover {
+    background-color: #7f8c8d;
+}
+
+.using-template {
+    border: 1px solid #3498db;
+    background-color: #f0f8ff;
+}
+
+input[type="text"],
+input[type="datetime-local"],
+textarea {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus,
+input[type="datetime-local"]:focus,
+textarea:focus {
+    border-color: #3498db;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.tags-input-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 5px;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e1f0fa;
+    color: #3498db;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.tag-remove {
+    margin-left: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #7f8c8d;
+}
+
+.tag-remove:hover {
+    color: #e74c3c;
+}
+
+#tags-input {
+    border: none;
+    outline: none;
+    padding: 5px;
+    width: 100%;
+}
+
+.validation-message {
+    color: #e74c3c;
+    font-size: 12px;
+    display: block;
+    margin-top: 3px;
+}
+
+.char-count {
+    color: #7f8c8d;
+    font-size: 12px;
+    display: block;
+    text-align: right;
+    margin-top: 3px;
+}
+
+.preview-content {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    padding: 15px;
+    min-height: 300px;
+    max-height: 600px;
+    overflow-y: auto;
+    font-family: 'Courier New', Courier, monospace;
+    white-space: pre-wrap;
+}
+
+.preview-actions {
+    margin-bottom: 10px;
+    text-align: right;
+}
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+#clear-button {
+    background-color: #e74c3c;
+}
+
+#clear-button:hover {
+    background-color: #c0392b;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.file-upload {
+    margin-left: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.file-upload label {
+    background-color: #7f8c8d;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    margin-bottom: 0;
+}
+
+.file-upload label:hover {
+    background-color: #6c7a7d;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.image-preview-container {
+    margin-top: 10px;
+    position: relative;
+    display: inline-block;
+}
+
+.image-preview-container img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.remove-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(231, 76, 60, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    padding: 0;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Markdown styling for preview */
+.preview-content h1,
+.preview-content h2,
+.preview-content h3,
+.preview-content h4,
+.preview-content h5,
+.preview-content h6 {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    color: #2c3e50;
+}
+
+.preview-content p {
+    margin-bottom: 1em;
+}
+
+.preview-content ul,
+.preview-content ol {
+    margin-bottom: 1em;
+    padding-left: 2em;
+}
+
+.preview-content blockquote {
+    border-left: 4px solid #3498db;
+    padding-left: 1em;
+    margin-left: 0;
+    color: #7f8c8d;
+}
+
+.preview-content code {
+    background-color: #f0f0f0;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.preview-content pre {
+    background-color: #f0f0f0;
+    padding: 1em;
+    border-radius: 3px;
+    overflow-x: auto;
+}
+
+.preview-content img {
+    max-width: 100%;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .editor-container {
+        flex-direction: column;
+    }
+    
+    .input-section {
+        padding-right: 0;
+    }
+    
+    .preview-section {
+        border-left: none;
+        border-top: 1px solid #eee;
+        padding-left: 0;
+        padding-top: 20px;
+        margin-top: 20px;
+    }
+}
