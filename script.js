@@ -20,12 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const saveButton = document.getElementById('save-button');
     const clearButton = document.getElementById('clear-button');
     const markdownUpload = document.getElementById('markdown-upload');
-    
-    // Template buttons
-    const saveHeaderTemplateBtn = document.getElementById('save-header-template');
-    const loadHeaderTemplateBtn = document.getElementById('load-header-template');
-    const saveFooterTemplateBtn = document.getElementById('save-footer-template');
-    const loadFooterTemplateBtn = document.getElementById('load-footer-template');
 
     // Validation messages
     const filenameValidation = document.getElementById('filename-validation');
@@ -48,9 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load saved data from localStorage
     loadFromLocalStorage();
-    
-    // Check if we have default templates
-    checkForDefaultTemplates();
 
     // Event listeners
     titleInput.addEventListener('input', validateTitle);
@@ -63,12 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     saveButton.addEventListener('click', saveToLocalStorage);
     clearButton.addEventListener('click', clearEditor);
     markdownUpload.addEventListener('change', handleMarkdownUpload);
-    
-    // Template event listeners
-    saveHeaderTemplateBtn.addEventListener('click', saveHeaderTemplate);
-    loadHeaderTemplateBtn.addEventListener('click', loadHeaderTemplate);
-    saveFooterTemplateBtn.addEventListener('click', saveFooterTemplate);
-    loadFooterTemplateBtn.addEventListener('click', loadFooterTemplate);
 
     // Update preview when any input changes
     const allInputs = [filenameInput, titleInput, dateInput, summaryInput, headerInput, contentInput, footerInput, imageAltInput];
@@ -374,7 +359,7 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 // Extract frontmatter and content
                 const frontmatterText = match[1];
-                let mainContent = content.replace(frontmatterRegex, '');
+                const mainContent = content.replace(frontmatterRegex, '');
                 
                 // Parse YAML frontmatter
                 const frontmatter = jsyaml.load(frontmatterText);
@@ -425,13 +410,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     validateSummary();
                 }
                 
-                // Try to extract header and footer from content
-                const { extractedHeader, extractedFooter, remainingContent } = extractHeaderAndFooter(mainContent);
-                
-                // Set content fields
-                headerInput.value = extractedHeader;
-                contentInput.value = remainingContent.trim();
-                footerInput.value = extractedFooter;
+                // Set content
+                contentInput.value = mainContent.trim();
                 
                 // Update preview
                 updatePreview();
@@ -443,134 +423,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             // No frontmatter found, just set the content
-            const { extractedHeader, extractedFooter, remainingContent } = extractHeaderAndFooter(content);
-            
-            headerInput.value = extractedHeader;
-            contentInput.value = remainingContent.trim();
-            footerInput.value = extractedFooter;
-            
+            contentInput.value = content.trim();
             updatePreview();
             alert('No YAML frontmatter found. Content has been added to the editor.');
         }
-    }
-    
-    // Extract header and footer from content
-    function extractHeaderAndFooter(content) {
-        let extractedHeader = '';
-        let extractedFooter = '';
-        let remainingContent = content;
         
-        // Get default header and footer for comparison
-        const defaultHeader = localStorage.getItem('metaEditorHeaderTemplate') || '';
-        const defaultFooter = localStorage.getItem('metaEditorFooterTemplate') || '';
-        
-        // Check if default header exists in the content
-        if (defaultHeader && content.includes(defaultHeader)) {
-            extractedHeader = defaultHeader;
-            remainingContent = remainingContent.replace(defaultHeader, '').trim();
-        } else {
-            // Try to identify header (first paragraph before any other content)
-            const firstParagraphMatch = remainingContent.match(/^([^\n]+(?:\n[^\n]+)?)\n\n/);
-            if (firstParagraphMatch && firstParagraphMatch[1].length < 200) { // Limit header size
-                extractedHeader = firstParagraphMatch[1];
-                remainingContent = remainingContent.replace(firstParagraphMatch[0], '');
-            }
-        }
-        
-        // Check if default footer exists in the content
-        if (defaultFooter && content.includes(defaultFooter)) {
-            extractedFooter = defaultFooter;
-            remainingContent = remainingContent.replace(defaultFooter, '').trim();
-        } else {
-            // Try to identify footer (last few lines, especially if they contain contact info or links)
-            const footerMatch = remainingContent.match(/\n\n([^\n]+(?:\n[^\n]+){1,5})$/); // Last few lines
-            if (footerMatch && footerMatch[1].includes('Contact') || 
-                (footerMatch && footerMatch[1].includes('{filename}')) || 
-                (footerMatch && footerMatch[1].includes('{static}'))) {
-                extractedFooter = footerMatch[1];
-                remainingContent = remainingContent.replace(footerMatch[0], '');
-            }
-        }
-        
-        return { extractedHeader, extractedFooter, remainingContent };
-    }
-        
-    // Reset the file input
-    markdownUpload.value = '';
-}
-    
-    // Template management functions
-    function saveHeaderTemplate() {
-        const headerContent = headerInput.value.trim();
-        if (headerContent) {
-            localStorage.setItem('metaEditorHeaderTemplate', headerContent);
-            headerInput.classList.add('using-template');
-            alert('Header template saved as default!');
-        } else {
-            alert('Please enter header content before saving as template.');
-        }
-    }
-    
-    function loadHeaderTemplate() {
-        const savedTemplate = localStorage.getItem('metaEditorHeaderTemplate');
-        if (savedTemplate) {
-            headerInput.value = savedTemplate;
-            headerInput.classList.add('using-template');
-            updatePreview();
-        } else {
-            alert('No default header template found.');
-        }
-    }
-    
-    function saveFooterTemplate() {
-        const footerContent = footerInput.value.trim();
-        if (footerContent) {
-            localStorage.setItem('metaEditorFooterTemplate', footerContent);
-            footerInput.classList.add('using-template');
-            alert('Footer template saved as default!');
-        } else {
-            alert('Please enter footer content before saving as template.');
-        }
-    }
-    
-    function loadFooterTemplate() {
-        const savedTemplate = localStorage.getItem('metaEditorFooterTemplate');
-        if (savedTemplate) {
-            footerInput.value = savedTemplate;
-            footerInput.classList.add('using-template');
-            updatePreview();
-        } else {
-            alert('No default footer template found.');
-        }
-    }
-    
-    function checkForDefaultTemplates() {
-        // Check if we have default templates and update UI accordingly
-        const headerTemplate = localStorage.getItem('metaEditorHeaderTemplate');
-        const footerTemplate = localStorage.getItem('metaEditorFooterTemplate');
-        
-        if (headerTemplate && headerInput.value === headerTemplate) {
-            headerInput.classList.add('using-template');
-        }
-        
-        if (footerTemplate && footerInput.value === footerTemplate) {
-            footerInput.classList.add('using-template');
-        }
-        
-        // Add input event listeners to remove template highlighting when content changes
-        headerInput.addEventListener('input', function() {
-            const savedTemplate = localStorage.getItem('metaEditorHeaderTemplate');
-            if (savedTemplate !== headerInput.value) {
-                headerInput.classList.remove('using-template');
-            }
-        });
-        
-        footerInput.addEventListener('input', function() {
-            const savedTemplate = localStorage.getItem('metaEditorFooterTemplate');
-            if (savedTemplate !== footerInput.value) {
-                footerInput.classList.remove('using-template');
-            }
-        });
-    }
+        // Reset the file input
+        markdownUpload.value = '';
     }
 });

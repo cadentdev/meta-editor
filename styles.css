@@ -61,38 +61,6 @@ label {
     color: #555;
 }
 
-.field-with-actions {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 5px;
-}
-
-.template-actions {
-    display: flex;
-    gap: 5px;
-}
-
-.template-button {
-    background-color: #95a5a6;
-    color: white;
-    border: none;
-    padding: 3px 8px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 12px;
-    transition: background-color 0.3s;
-}
-
-.template-button:hover {
-    background-color: #7f8c8d;
-}
-
-.using-template {
-    border: 1px solid #3498db;
-    background-color: #f0f8ff;
-}
-
 input[type="text"],
 input[type="datetime-local"],
 textarea {
