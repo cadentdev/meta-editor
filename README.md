@@ -8,13 +8,14 @@ A web-based editor that prepares a post for publication on the web by adding ess
 - **Frontmatter Management**: Separate input fields for Title, Date, Tags, and Summary
 - **File Name Field**: Track and manage your document filenames
 - **Header & Footer Templates**: Save and reuse common header and footer content across multiple posts
-- **Hero Image Support**: Upload a featured image with alt text
+- **Advanced Hero Image Support**: Upload or extract featured images with automatic filename and alt text handling
 - **Tag Management**: Visual tag interface with easy addition and removal
 - **Markdown Content Editor**: Write your post content in markdown format
 
 ### File Operations
 - **Upload Markdown Files**: Import existing markdown files with YAML frontmatter
-- **Auto-Parse Content**: Automatically extracts frontmatter fields and recognizes header/footer content
+- **Auto-Parse Content**: Automatically extracts frontmatter fields, hero images, and recognizes header/footer content
+- **Smart Image Extraction**: Identifies and extracts the first image in uploaded content as the hero image
 - **Download Markdown**: Export your content as properly formatted markdown files
 
 ### User Experience
@@ -44,7 +45,9 @@ A web-based editor that prepares a post for publication on the web by adding ess
 ### Importing Existing Content
 1. Click "Upload Markdown File" to import an existing markdown file
 2. The system will automatically parse YAML frontmatter
-3. If your file contains content matching saved header/footer templates, they'll be extracted
+3. The first image in the content will be extracted as the hero image
+4. Image filename and alt text are automatically populated in their respective fields
+5. If your file contains content matching saved header/footer templates, they'll be extracted
 
 ### Exporting Your Work
 1. Ensure the File Name field contains a valid filename

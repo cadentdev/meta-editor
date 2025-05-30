@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const imagePreviewContainer = document.getElementById('image-preview-container');
     const imagePreview = document.getElementById('image-preview');
     const removeImageBtn = document.getElementById('remove-image');
+    const imageFilenameInput = document.getElementById('image-filename');
     const imageAltInput = document.getElementById('image-alt');
     const headerInput = document.getElementById('header');
     const contentInput = document.getElementById('content');
@@ -69,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFooterTemplateBtn.addEventListener('click', loadFooterTemplate);
 
     // Update preview when any input changes
-    const allInputs = [filenameInput, titleInput, dateInput, summaryInput, headerInput, contentInput, footerInput, imageAltInput];
+    const allInputs = [filenameInput, titleInput, dateInput, summaryInput, headerInput, contentInput, footerInput, imageFilenameInput, imageAltInput];
     allInputs.forEach(input => {
         input.addEventListener('input', updatePreview);
     });
@@ -287,6 +288,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
                 imagePreview.src = event.target.result;
                 imagePreviewContainer.classList.remove('hidden');
+                
+                // Update image filename field
+                imageFilenameInput.value = file.name;
+                
                 updatePreview();
             };
             reader.readAsDataURL(file);
@@ -298,6 +303,7 @@ document.addEventListener('DOMContentLoaded', () => {
         imagePreview.src = '';
         imagePreviewContainer.classList.add('hidden');
         heroImageInput.value = '';
+        imageFilenameInput.value = '';
         updatePreview();
     }
 
@@ -336,8 +342,13 @@ document.addEventListener('DOMContentLoaded', () => {
             content += headerInput.value.trim() + '\n\n';
         }
         
+        // Add hero image if available
         if (heroImageData && imageAltInput.value.trim()) {
+            // If we have actual image data from upload
             content += `![${imageAltInput.value.trim()}]({static}/images/${heroImageData.name}){: .image-process-crisp}\n\n`;
+        } else if (imageFilenameInput.value.trim() && imageAltInput.value.trim()) {
+            // If we have extracted image filename and alt text
+            content += `![${imageAltInput.value.trim()}]({static}/images/${imageFilenameInput.value.trim()}){: .image-process-crisp}\n\n`;
         }
         
         content += contentInput.value;
@@ -419,6 +430,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tags: tags,
             summary: summaryInput.value,
             heroImage: heroImageData,
+            imageFilename: imageFilenameInput.value,
             imageAlt: imageAltInput.value,
             header: headerInput.value,
             content: contentInput.value,
@@ -447,6 +459,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 imagePreviewContainer.classList.remove('hidden');
             }
             
+            imageFilenameInput.value = data.imageFilename || '';
             imageAltInput.value = data.imageAlt || '';
             headerInput.value = data.header || '';
             contentInput.value = data.content || '';
@@ -477,6 +490,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tagsContainer.innerHTML = '';
             summaryInput.value = '';
             removeImage();
+            imageFilenameInput.value = '';
             imageAltInput.value = '';
             headerInput.value = '';
             contentInput.value = '';
@@ -518,6 +532,60 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.readAsText(file);
     }
     
+    // Function to extract hero image from markdown content
+    function extractHeroImage(content) {
+        // Look for markdown image syntax: ![alt text](image-path){optional-attributes}
+        const imageRegex = /!\[([^\]]*)\]\(([^\)]+)\)(\{[^\}]*\})?/;
+        const match = content.match(imageRegex);
+        
+        if (match) {
+            // Extract alt text and image path
+            const altText = match[1] || '';
+            let imagePath = match[2] || '';
+            const attributes = match[3] || '';
+            
+            // Store the full match to remove from content later
+            const fullMatch = match[0];
+            
+            // Extract just the filename from the path
+            // Handle paths like {static}/images/filename.jpg or regular paths
+            const staticMatch = imagePath.match(/\{static\}\/images\/([^\s]+)/);
+            const regularMatch = imagePath.match(/\/images\/([^\s]+)/);
+            const simpleMatch = imagePath.match(/([^\/\\\s]+\.(?:jpg|jpeg|png|gif|webp|svg))$/i);
+            
+            let filename = '';
+            if (staticMatch && staticMatch[1]) {
+                filename = staticMatch[1];
+            } else if (regularMatch && regularMatch[1]) {
+                filename = regularMatch[1];
+            } else if (simpleMatch && simpleMatch[1]) {
+                filename = simpleMatch[1];
+            } else {
+                // If we can't parse the filename, use the whole path
+                filename = imagePath;
+            }
+            
+            // Update the image alt text field
+            imageAltInput.value = altText;
+            
+            // Update the image filename field
+            imageFilenameInput.value = filename;
+            
+            // We don't have the actual image data, so we can't show a preview
+            // But we can indicate that an image reference was found
+            heroImageData = null;
+            imagePreviewContainer.classList.add('hidden');
+            
+            // Remove the image markdown from the content and return the modified content
+            return { 
+                content: content.replace(fullMatch, '').trim(),
+                found: true 
+            };
+        }
+        
+        return { content: content, found: false };
+    }
+    
     function parseMarkdownFile(content) {
         // Check if the file has YAML frontmatter (between --- delimiters)
         const frontmatterRegex = /^---\s*[\r\n]+(.*?)[\r\n]+---\s*[\r\n]+/s;
@@ -528,6 +596,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Extract frontmatter and content
                 const frontmatterText = match[1];
                 let mainContent = content.replace(frontmatterRegex, '');
+                
+                // Try to extract hero image
+                const heroResult = extractHeroImage(mainContent);
+                if (heroResult.found) {
+                    mainContent = heroResult.content;
+                }
                 
                 // Parse YAML frontmatter
                 const frontmatter = jsyaml.load(frontmatterText);
@@ -610,6 +684,12 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             // No frontmatter found, just set the content
             let mainContent = content.trim();
+            
+            // Try to extract hero image
+            const heroResult = extractHeroImage(mainContent);
+            if (heroResult.found) {
+                mainContent = heroResult.content;
+            }
             
             // Try to identify header and footer content
             const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
