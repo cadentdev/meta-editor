@@ -4,25 +4,52 @@ A web-based editor that prepares a post for publication on the web by adding ess
 
 ## Features
 
+### Content Management
 - **Frontmatter Management**: Separate input fields for Title, Date, Tags, and Summary
+- **File Name Field**: Track and manage your document filenames
+- **Header & Footer Templates**: Save and reuse common header and footer content across multiple posts
 - **Hero Image Support**: Upload a featured image with alt text
 - **Tag Management**: Visual tag interface with easy addition and removal
 - **Markdown Content Editor**: Write your post content in markdown format
-- **Reusable Footer**: Add consistent footer content across multiple posts
+
+### File Operations
+- **Upload Markdown Files**: Import existing markdown files with YAML frontmatter
+- **Auto-Parse Content**: Automatically extracts frontmatter fields and recognizes header/footer content
+- **Download Markdown**: Export your content as properly formatted markdown files
+
+### User Experience
 - **Live Preview**: See your formatted post in real-time
 - **Local Storage**: Save your work between browser sessions
 - **Copy to Clipboard**: Easily copy the formatted output
 - **Field Validation**: Ensures proper formatting of all fields
+- **Persistent Templates**: Header and footer templates persist across sessions
 
 ## Usage
 
-1. Fill in the frontmatter fields (Title, Date, Tags, Summary)
-2. Upload a hero image if desired and add alt text
-3. Write your main content in the Content field
-4. Add any reusable footer content in the Footer field
-5. Preview your formatted post in the right panel
-6. Click "Copy to Clipboard" to copy the formatted output
-7. Click "Save" to store your work in the browser's local storage
+### Creating New Content
+1. Enter a valid filename in the File Name field (lowercase with hyphens)
+2. Fill in the frontmatter fields (Title, Date, Tags, Summary)
+3. Add header content or load a saved header template
+4. Upload a hero image if desired and add alt text
+5. Write your main content in the Content field
+6. Add footer content or load a saved footer template
+7. Preview your formatted post in the right panel
+8. Click "Save" to store your work in the browser's local storage
+
+### Working with Templates
+1. Create your header or footer content
+2. Click "Save Default" next to the field to save as a template
+3. Use "Load Default" to apply the template to any document
+
+### Importing Existing Content
+1. Click "Upload Markdown File" to import an existing markdown file
+2. The system will automatically parse YAML frontmatter
+3. If your file contains content matching saved header/footer templates, they'll be extracted
+
+### Exporting Your Work
+1. Ensure the File Name field contains a valid filename
+2. Click "Download Markdown" to save your content as a .md file
+3. Or use "Copy to Clipboard" to copy the formatted output
 
 ## Technologies
 
@@ -31,6 +58,8 @@ A web-based editor that prepares a post for publication on the web by adding ess
 - Local Storage API
 - FileReader API for image handling
 - Marked.js for Markdown rendering
+- js-yaml for YAML frontmatter parsing
+- Blob API for file downloads
 
 ## Getting Started
 

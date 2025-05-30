@@ -170,6 +170,22 @@ textarea:focus {
 .preview-actions {
     margin-bottom: 10px;
     text-align: right;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+#download-button {
+    background-color: #27ae60;
+}
+
+#download-button:hover {
+    background-color: #219653;
+}
+
+#download-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
 }
 
 button {

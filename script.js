@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const footerInput = document.getElementById('footer');
     const previewElement = document.getElementById('preview');
     const copyButton = document.getElementById('copy-button');
+    const downloadButton = document.getElementById('download-button');
     const saveButton = document.getElementById('save-button');
     const clearButton = document.getElementById('clear-button');
     const markdownUpload = document.getElementById('markdown-upload');
@@ -48,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadFromLocalStorage();
 
     // Event listeners
+    filenameInput.addEventListener('input', validateFilename);
     titleInput.addEventListener('input', validateTitle);
     dateInput.addEventListener('input', validateDate);
     summaryInput.addEventListener('input', validateSummary);
@@ -55,6 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
     heroImageInput.addEventListener('change', handleImageUpload);
     removeImageBtn.addEventListener('click', removeImage);
     copyButton.addEventListener('click', copyToClipboard);
+    downloadButton.addEventListener('click', downloadMarkdown);
     saveButton.addEventListener('click', saveToLocalStorage);
     clearButton.addEventListener('click', clearEditor);
     markdownUpload.addEventListener('change', handleMarkdownUpload);
@@ -140,6 +143,50 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Validation functions
+    function validateFilename() {
+        const filename = filenameInput.value.trim();
+        
+        if (filename.length === 0) {
+            filenameValidation.textContent = 'Filename is required for download';
+            downloadButton.disabled = true;
+            return false;
+        }
+        
+        // Check if filename has an extension
+        if (filename.includes('.')) {
+            // If it has an extension, it must be .md
+            if (!filename.endsWith('.md')) {
+                filenameValidation.textContent = 'Only .md extension is allowed';
+                downloadButton.disabled = true;
+                return false;
+            }
+            
+            // Check if the base filename (without extension) is valid
+            const baseFilename = filename.substring(0, filename.lastIndexOf('.'));
+            const baseFilenameRegex = /^[a-z0-9-]+$/;
+            
+            if (!baseFilenameRegex.test(baseFilename)) {
+                filenameValidation.textContent = 'Filename must be lowercase with hyphens only';
+                downloadButton.disabled = true;
+                return false;
+            }
+        } else {
+            // No extension, just check if the filename is valid
+            const filenameRegex = /^[a-z0-9-]+$/;
+            
+            if (!filenameRegex.test(filename)) {
+                filenameValidation.textContent = 'Filename must be lowercase with hyphens only';
+                downloadButton.disabled = true;
+                return false;
+            }
+        }
+        
+        // If we got here, the filename is valid
+        filenameValidation.textContent = '';
+        downloadButton.disabled = false;
+        return true;
+    }
+    
     function validateTitle() {
         const title = titleInput.value.trim();
         if (title.length === 0) {
@@ -318,6 +365,50 @@ document.addEventListener('DOMContentLoaded', () => {
             console.error('Failed to copy: ', err);
         });
     }
+    
+    // Download markdown file
+    function downloadMarkdown() {
+        if (!validateFilename()) {
+            alert('Please enter a valid filename');
+            return;
+        }
+        
+        // Get content from preview
+        const content = previewElement.textContent;
+        
+        // Create blob and download link
+        const blob = new Blob([content], { type: 'text/markdown' });
+        const url = URL.createObjectURL(blob);
+        
+        // Create download link
+        const downloadLink = document.createElement('a');
+        
+        // Get filename and ensure it has .md extension
+        let filename = filenameInput.value.trim();
+        if (!filename.endsWith('.md')) {
+            filename += '.md';
+        }
+        
+        downloadLink.href = url;
+        downloadLink.download = filename;
+        
+        // Append to body, click, and remove
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+        
+        // Clean up the URL object
+        setTimeout(() => {
+            URL.revokeObjectURL(url);
+        }, 100);
+        
+        // Show confirmation
+        const originalText = downloadButton.textContent;
+        downloadButton.textContent = 'Downloaded!';
+        setTimeout(() => {
+            downloadButton.textContent = originalText;
+        }, 2000);
+    }
 
     // Local storage functions
     function saveToLocalStorage() {
@@ -415,6 +506,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Remove file extension
             const filename = file.name.replace(/\.[^/.]+$/, '');
             filenameInput.value = filename;
+            // Run validation on the filename
+            validateFilename();
         }
         
         const reader = new FileReader();
