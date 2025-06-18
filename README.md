@@ -1,6 +1,32 @@
 # Meta Editor
 
-A web-based editor that prepares a post for publication on the web by adding essential meta data. This tool helps content creators format their posts with proper frontmatter and markdown content for web publishing.
+A web-based editor that prepares a post for publication on the web by adding essential metadata. This tool helps content creators who prefer Markdown to format their posts with proper frontmatter and metadata for web publishing.
+
+## Local and Private
+
+Although the code is hosted on a web server, once your browser downloads the HTML, CSS, and JavaScript files, the application runs locally in your browser. This means:
+
+- You can use it offline 
+- You can keep your data private
+- No server setup or installation is required
+- None of your data is sent to or stored on a server
+- When you save your work, it is stored in your browser's local storage or on your device
+
+You can always run the latest release at https://cadentdev.github.io/meta-editor/.
+
+## Installation
+
+To install the Meta Editor code, you can download or clone this repository to your local machine. Then simply open the `index.html` file in your web browser. That's it -- no need to run a web server
+
+## Using Meta Editor
+
+Start by writing your new post in your favorite text editor or word processor, formatted using Markdown. Copy the new document and paste it into the Content field. Then fill in the other metadata fields. 
+
+As you add the data, the Meta Editor will format the complete Markdown document with correctly formatted YAML frontmatter at the top. When you're done editing, just copy the Markdown document or download it to your device.
+
+If you save the document to your device, you can also re-open it back in the Meta Editor to continue editing.
+
+You can even add a hero image to your post in Meta Editor by uploading the image and adding an alt text description. The Meta Editor will generate the correct Markdown code for your hero image at the top of the document.
 
 ## Features
 
