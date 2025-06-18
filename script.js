@@ -1,4 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Menu, Toolbar and Status Bar Elements
+    const menuItems = document.querySelectorAll('.menu-item');
+    const menuActions = document.querySelectorAll('.menu-action');
+    const statusMessage = document.getElementById('status-message');
+    const toolbarButtons = document.querySelectorAll('.toolbar-button');
+    const toolbar = document.getElementById('toolbar');
+    
+    // UI Element visibility state
+    const uiState = {
+        toolbar: true
+    };
+    
+    // Set initial status message
+    statusMessage.textContent = 'Version 0.1';
+    
+    // Load UI state from localStorage if available
+    loadUIState();
+    
     // DOM Elements
     const filenameInput = document.getElementById('filename');
     const titleInput = document.getElementById('title');
@@ -19,8 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const previewElement = document.getElementById('preview');
     const copyButton = document.getElementById('copy-button');
     const downloadButton = document.getElementById('download-button');
-    const saveButton = document.getElementById('save-button');
-    const clearButton = document.getElementById('clear-button');
     const markdownUpload = document.getElementById('markdown-upload');
     const saveHeaderTemplateBtn = document.getElementById('save-header-template');
     const loadHeaderTemplateBtn = document.getElementById('load-header-template');
@@ -59,8 +75,6 @@ document.addEventListener('DOMContentLoaded', () => {
     removeImageBtn.addEventListener('click', removeImage);
     copyButton.addEventListener('click', copyToClipboard);
     downloadButton.addEventListener('click', downloadMarkdown);
-    saveButton.addEventListener('click', saveToLocalStorage);
-    clearButton.addEventListener('click', clearEditor);
     markdownUpload.addEventListener('change', handleMarkdownUpload);
     
     // Template button event listeners
@@ -80,6 +94,54 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // Initial preview update
     updatePreview();
+    
+    // Menu event listeners
+    menuItems.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+            const menuTitle = item.querySelector('.menu-title').textContent;
+            statusMessage.textContent = menuTitle;
+        });
+        
+        item.addEventListener('mouseleave', () => {
+            statusMessage.textContent = 'Version 0.1';
+        });
+    });
+    
+    // Menu action event listeners
+    menuActions.forEach(action => {
+        action.addEventListener('mouseenter', () => {
+            statusMessage.textContent = action.textContent;
+        });
+        
+        action.addEventListener('mouseleave', () => {
+            const parentMenuTitle = action.closest('.menu-item').querySelector('.menu-title').textContent;
+            statusMessage.textContent = parentMenuTitle;
+        });
+        
+        action.addEventListener('click', () => {
+            const actionType = action.getAttribute('data-action');
+            handleMenuAction(actionType);
+        });
+    });
+    
+    // Toolbar button event listeners
+    toolbarButtons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+            statusMessage.textContent = button.getAttribute('title');
+        });
+        
+        button.addEventListener('mouseleave', () => {
+            statusMessage.textContent = 'Version 0.1';
+        });
+        
+        button.addEventListener('click', () => {
+            const actionType = button.getAttribute('data-action');
+            handleMenuAction(actionType);
+        });
+    });
+    
+    // Apply initial UI state
+    applyUIState();
     
     // Template functions
     function saveHeaderTemplate() {
@@ -716,5 +778,96 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Reset the file input
         markdownUpload.value = '';
+    }
+    
+    // Handle menu actions
+    function handleMenuAction(actionType) {
+        switch (actionType) {
+            case 'about':
+                alert('MetaEditor v0.1\nA markdown editor with frontmatter support.');
+                break;
+            case 'settings':
+                alert('Settings functionality will be implemented in a future version.');
+                break;
+            case 'new-post':
+                clearEditor();
+                break;
+            case 'open-markdown':
+                markdownUpload.click();
+                break;
+            case 'save':
+                saveToLocalStorage();
+                break;
+            case 'download-markdown':
+                downloadMarkdown();
+                break;
+            case 'copy-markdown':
+                copyToClipboard();
+                break;
+            case 'toggle-toolbar':
+                toggleUIElement('toolbar');
+                break;
+            case 'zen-mode':
+                enableZenMode();
+                break;
+            case 'show-all':
+                showAllUIElements();
+                break;
+            default:
+                console.log('Unknown action:', actionType);
+        }
+    }
+    
+    // UI State Management Functions
+    function loadUIState() {
+        const savedState = localStorage.getItem('metaEditorUIState');
+        if (savedState) {
+            try {
+                const parsedState = JSON.parse(savedState);
+                Object.assign(uiState, parsedState);
+            } catch (e) {
+                console.error('Error loading UI state:', e);
+            }
+        }
+    }
+    
+    function saveUIState() {
+        localStorage.setItem('metaEditorUIState', JSON.stringify(uiState));
+    }
+    
+    function applyUIState() {
+        // Apply toolbar visibility
+        if (uiState.toolbar) {
+            toolbar.classList.remove('hidden');
+        } else {
+            toolbar.classList.add('hidden');
+        }
+    }
+    
+    function toggleUIElement(elementName) {
+        if (uiState.hasOwnProperty(elementName)) {
+            uiState[elementName] = !uiState[elementName];
+            applyUIState();
+            saveUIState();
+        }
+    }
+    
+    function enableZenMode() {
+        // Hide all UI elements except the essential ones
+        uiState.toolbar = false;
+        applyUIState();
+        saveUIState();
+        
+        // You can add more UI elements to hide here as they are implemented
+        alert('Zen Mode enabled. Use View > Show All to restore all UI elements.');
+    }
+    
+    function showAllUIElements() {
+        // Show all UI elements
+        uiState.toolbar = true;
+        applyUIState();
+        saveUIState();
+        
+        // You can add more UI elements to show here as they are implemented
     }
 });

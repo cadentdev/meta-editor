@@ -5,10 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meta Editor</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="menu-styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Meta Editor</h1>
+        <div class="header-bar">
+            <h1>Meta Editor</h1>
+        </div>
+        
+        <div class="menu-bar">
+            <div class="menu-item">
+                <span class="menu-title">MetaEditor</span>
+                <div class="dropdown-content">
+                    <div class="menu-action" data-action="about">About MetaEditor</div>
+                    <div class="menu-action" data-action="settings">Settings...</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span class="menu-title">File</span>
+                <div class="dropdown-content">
+                    <div class="menu-action" data-action="new-post">New Post</div>
+                    <div class="menu-action" data-action="open-markdown">Open Markdown Post...</div>
+                    <div class="menu-action" data-action="save">Save</div>
+                    <div class="menu-action" data-action="download-markdown">Download Markdown Post...</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span class="menu-title">Edit</span>
+                <div class="dropdown-content">
+                    <div class="menu-action" data-action="copy-markdown">Copy Markdown Post</div>
+                </div>
+            </div>
+            <div class="menu-item">
+                <span class="menu-title">View</span>
+                <div class="dropdown-content">
+                    <div class="menu-action" data-action="toggle-toolbar">Toolbar</div>
+                    <div class="menu-action" data-action="zen-mode">Hide All (Zen Mode)</div>
+                    <div class="menu-action" data-action="show-all">Show All</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="toolbar" id="toolbar">
+            <div class="toolbar-button" data-action="new-post" title="New Post">
+                <i class="fas fa-file"></i>
+            </div>
+            <div class="toolbar-button" data-action="open-markdown" title="Open Markdown Post">
+                <i class="fas fa-folder-open"></i>
+            </div>
+            <div class="toolbar-button" data-action="save" title="Save">
+                <i class="fas fa-save"></i>
+            </div>
+            <div class="toolbar-button" data-action="download-markdown" title="Download Markdown Post">
+                <i class="fas fa-download"></i>
+            </div>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-button" data-action="copy-markdown" title="Copy Markdown Post">
+                <i class="fas fa-copy"></i>
+            </div>
+
+        </div>
         
         <div class="editor-container">
             <div class="input-section">
@@ -100,14 +157,12 @@
             </div>
         </div>
         
-        <div class="actions">
-            <button id="save-button">Save</button>
-            <button id="clear-button">Clear</button>
-            <div class="file-upload">
-                <label for="markdown-upload">Upload Markdown File</label>
-                <input type="file" id="markdown-upload" accept=".md,.markdown,.txt">
-            </div>
-        </div>
+        <!-- File upload input hidden but still functional -->
+        <input type="file" id="markdown-upload" accept=".md,.markdown,.txt" style="display: none;">
+    </div>
+    
+    <div class="status-bar">
+        <div id="status-message">Version 0.1</div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
