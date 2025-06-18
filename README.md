@@ -19,11 +19,15 @@ A web-based editor that prepares a post for publication on the web by adding ess
 - **Download Markdown**: Export your content as properly formatted markdown files
 
 ### User Experience
+- **Mac-Style Menu Bar**: Organized access to all application features
+- **Icon Toolbar**: Quick access to common actions with visual icons
+- **View Menu**: Toggle UI elements and enable Zen Mode for distraction-free editing
 - **Live Preview**: See your formatted post in real-time
 - **Local Storage**: Save your work between browser sessions
 - **Copy to Clipboard**: Easily copy the formatted output
 - **Field Validation**: Ensures proper formatting of all fields
 - **Persistent Templates**: Header and footer templates persist across sessions
+- **Status Bar**: Shows contextual information and application version
 
 ## Usage
 
@@ -71,6 +75,25 @@ A web-based editor that prepares a post for publication on the web by adding ess
   - `styles.css` - Main stylesheet
   - `menu-styles.css` - Styles for menu bar and toolbar
   - `script.js` - Application JavaScript
+
+## Testing Strategy
+
+The Meta Editor uses a three-tiered testing approach:
+
+### Unit Tests (Jest)
+- Test individual functions like `clearEditor()`, `saveToLocalStorage()`, `validateFilename()`
+- Mock dependencies and localStorage
+- Focus on logic and data transformation
+
+### Integration Tests (Jest + DOM Testing Library)
+- Test interactions between components
+- Verify menu actions trigger correct functions
+- Test UI state management functions
+
+### E2E Tests (Playwright/Puppeteer)
+- Test complete user workflows
+- Verify persistence across page reloads
+- Test file uploads/downloads
 
 ## Getting Started
 
