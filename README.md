@@ -64,9 +64,17 @@ A web-based editor that prepares a post for publication on the web by adding ess
 - js-yaml for YAML frontmatter parsing
 - Blob API for file downloads
 
+## Project Structure
+
+- `dist/` - Contains all the application files:
+  - `index.html` - The main HTML file
+  - `styles.css` - Main stylesheet
+  - `menu-styles.css` - Styles for menu bar and toolbar
+  - `script.js` - Application JavaScript
+
 ## Getting Started
 
-Simply open `index.html` in your web browser to start using the editor. No server setup or installation required.
+Simply open `dist/index.html` in your web browser to start using the editor. No server setup or installation required.
 
 ## Field Details
 
