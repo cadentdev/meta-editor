@@ -32,6 +32,7 @@ h1 {
 h2 {
     color: #3498db;
     margin-bottom: 15px;
+    padding-top: 25px;
     padding-bottom: 5px;
     border-bottom: 1px solid #eee;
 }
@@ -99,6 +100,12 @@ textarea:focus {
     border-color: #3498db;
     outline: none;
     box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+#content {
+    min-height: 300px;
+    max-height: 600px;
+    resize: vertical;
 }
 
 .tags-input-container {

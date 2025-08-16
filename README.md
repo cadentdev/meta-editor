@@ -31,41 +31,52 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 ## Features
 
 ### Content Management
-- **Frontmatter Management**: Separate input fields for Title, Date, Tags, and Summary
-- **File Name Field**: Track and manage your document filenames
+- **Meta Data Management**: Separate input fields for Title, Date, Tags, and Summary (formerly "Frontmatter")
+- **File Name Field**: Track and manage your document filenames with validation
 - **Header & Footer Templates**: Save and reuse common header and footer content across multiple posts
 - **Advanced Hero Image Support**: Upload or extract featured images with automatic filename and alt text handling
 - **Tag Management**: Visual tag interface with easy addition and removal
-- **Markdown Content Editor**: Write your post content in markdown format
+- **Markdown Content Editor**: Write your post content in markdown format with expanded height matching preview
 
 ### File Operations
 - **Upload Markdown Files**: Import existing markdown files with YAML frontmatter
 - **Auto-Parse Content**: Automatically extracts frontmatter fields, hero images, and recognizes header/footer content
 - **Smart Image Extraction**: Identifies and extracts the first image in uploaded content as the hero image
 - **Download Markdown**: Export your content as properly formatted markdown files
+- **Copy to Clipboard**: Copy formatted markdown with user feedback in status bar
 
-### User Experience
-- **Mac-Style Menu Bar**: Organized access to all application features
-- **Icon Toolbar**: Quick access to common actions with visual icons
-- **View Menu**: Toggle UI elements and enable Zen Mode for distraction-free editing
-- **Live Preview**: See your formatted post in real-time
-- **Local Storage**: Save your work between browser sessions
-- **Copy to Clipboard**: Easily copy the formatted output
-- **Field Validation**: Ensures proper formatting of all fields
+### User Experience & Interface
+- **Mac-Style Menu Bar**: Organized access to all application features with proper dropdown behavior
+- **Icon Toolbar**: Quick access to common actions with visual icons (independent toggle)
+- **Zen Mode (Default)**: Launches in distraction-free mode showing only Content and Preview
+- **Independent UI Controls**: Separate toggles for toolbar visibility and field visibility
+- **Dynamic Menu Text**: Menu items show current state (Show/Hide All, Show/Hide Toolbar)
+- **Live Preview**: See your formatted post in real-time with improved spacing
+- **Local Storage**: Save your work and UI preferences between browser sessions
+- **Field Validation**: Ensures proper formatting of all fields with real-time feedback
 - **Persistent Templates**: Header and footer templates persist across sessions
-- **Status Bar**: Shows contextual information and application version
+- **Status Bar**: Shows contextual information, user feedback, and Zen Mode status
+- **Improved Layout**: Content field positioned at bottom with H2 heading for better workflow
 
 ## Usage
 
-### Creating New Content
-1. Enter a valid filename in the File Name field (lowercase with hyphens)
-2. Fill in the frontmatter fields (Title, Date, Tags, Summary)
-3. Add header content or load a saved header template
-4. Upload a hero image if desired and add alt text
-5. Write your main content in the Content field
+### Getting Started (Zen Mode Default)
+The Meta Editor launches in Zen Mode for distraction-free writing:
+1. Write your main content in the Content field (bottom of interface)
+2. Preview your formatted post in the right panel
+3. Use View > "Show All" to access meta data fields when ready
+4. Use View > "Hide Toolbar" to toggle toolbar visibility independently
+
+### Creating New Content (Full Interface)
+1. Use View > "Show All" to access all fields
+2. Enter a valid filename in the File Name field (lowercase with hyphens)
+3. Fill in the meta data fields (Title, Date, Tags, Summary)
+4. Add header content or load a saved header template
+5. Upload a hero image if desired and add alt text
 6. Add footer content or load a saved footer template
-7. Preview your formatted post in the right panel
-8. Click "Save" to store your work in the browser's local storage
+7. Write your main content in the Content field (positioned at bottom)
+8. Preview your formatted post in the right panel
+9. Use File > "Save" or toolbar to store your work locally
 
 ### Working with Templates
 1. Create your header or footer content
@@ -79,10 +90,17 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 4. Image filename and alt text are automatically populated in their respective fields
 5. If your file contains content matching saved header/footer templates, they'll be extracted
 
+### Interface Controls
+1. **Zen Mode**: Toggle between focused writing (Content + Preview only) and full interface
+2. **Toolbar**: Independently show/hide the icon toolbar for menu actions
+3. **Menu System**: Access all features through Mac-style menu bar with proper dropdown behavior
+4. **Status Feedback**: Get confirmation messages for copy/download actions in status bar
+
 ### Exporting Your Work
 1. Ensure the File Name field contains a valid filename
-2. Click "Download Markdown" to save your content as a .md file
-3. Or use "Copy to Clipboard" to copy the formatted output
+2. Use File > "Download Markdown Post..." or toolbar icon to save as .md file
+3. Use Edit > "Copy Markdown Post" or toolbar icon to copy formatted output
+4. Status bar provides feedback for successful operations
 
 ## Technologies
 
@@ -124,6 +142,27 @@ The Meta Editor uses a three-tiered testing approach:
 ## Getting Started
 
 Simply open `dist/index.html` in your web browser to start using the editor. No server setup or installation required.
+
+## Recent Improvements (v0.2)
+
+### Interface Enhancements
+- **Zen Mode Default**: Application now launches in distraction-free writing mode
+- **Independent UI Controls**: Separate toggles for toolbar and field visibility
+- **Improved Layout**: Content field moved to bottom with H2 heading for better workflow
+- **Enhanced Spacing**: Added consistent padding above all H2 headings for better visual hierarchy
+
+### User Experience
+- **Dynamic Menu Text**: Menu items now show current state (Show/Hide All, Show/Hide Toolbar)
+- **Proper Menu Behavior**: Dropdowns close after selecting items, as expected
+- **Status Bar Feedback**: Copy and download actions provide confirmation in status bar
+- **Streamlined Interface**: Removed duplicate buttons, consolidated functionality in menu/toolbar
+- **Content Field Sizing**: Expanded textarea height to match preview panel
+
+### Technical Improvements
+- **Independent State Management**: Toolbar and Zen Mode toggles work independently
+- **Persistent UI Preferences**: Interface state saves between sessions (except Zen Mode always defaults on)
+- **Git Integration**: Added .DS_Store and system files to .gitignore
+- **Code Organization**: Improved JavaScript structure and removed unused button references
 
 ## Field Details
 

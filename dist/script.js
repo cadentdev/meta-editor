@@ -8,14 +8,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     // UI Element visibility state
     const uiState = {
-        toolbar: true
+        toolbar: true,
+        zenMode: true
     };
     
     // Set initial status message
-    statusMessage.textContent = 'Version 0.1';
+    statusMessage.textContent = 'Version 0.2';
     
     // Load UI state from localStorage if available
     loadUIState();
+    
+    // Apply UI state to ensure default Zen Mode is active
+    applyUIState();
+    
+    // Update menu text based on initial state
+    updateZenModeMenuText();
+    updateToolbarMenuText();
     
     // DOM Elements
     const filenameInput = document.getElementById('filename');
@@ -35,8 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const contentInput = document.getElementById('content');
     const footerInput = document.getElementById('footer');
     const previewElement = document.getElementById('preview');
-    const copyButton = document.getElementById('copy-button');
-    const downloadButton = document.getElementById('download-button');
     const markdownUpload = document.getElementById('markdown-upload');
     const saveHeaderTemplateBtn = document.getElementById('save-header-template');
     const loadHeaderTemplateBtn = document.getElementById('load-header-template');
@@ -52,6 +58,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // State
     let tags = [];
     let heroImageData = null;
+    
+    // UI Helper Functions
+    function updateZenModeMenuText() {
+        const zenToggleMenu = document.getElementById('zen-toggle-menu');
+        if (zenToggleMenu) {
+            zenToggleMenu.textContent = uiState.zenMode ? 'Show All' : 'Hide All (Zen Mode)';
+        }
+    }
+    
+    function updateToolbarMenuText() {
+        const toolbarToggleMenu = document.getElementById('toolbar-toggle-menu');
+        if (toolbarToggleMenu) {
+            toolbarToggleMenu.textContent = uiState.toolbar ? 'Hide Toolbar' : 'Show Toolbar';
+        }
+    }
 
     // Initialize with current date and time
     const now = new Date();
@@ -73,8 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     tagsInput.addEventListener('keydown', handleTagInput);
     heroImageInput.addEventListener('change', handleImageUpload);
     removeImageBtn.addEventListener('click', removeImage);
-    copyButton.addEventListener('click', copyToClipboard);
-    downloadButton.addEventListener('click', downloadMarkdown);
     markdownUpload.addEventListener('change', handleMarkdownUpload);
     
     // Template button event listeners
@@ -104,6 +123,25 @@ document.addEventListener('DOMContentLoaded', () => {
         
         item.addEventListener('mouseleave', () => {
             statusMessage.textContent = 'Version 0.1';
+        });
+    });
+    
+    // Menu item hover listeners to handle dropdown visibility
+    menuItems.forEach(menuItem => {
+        const dropdown = menuItem.querySelector('.dropdown-content');
+        
+        menuItem.addEventListener('mouseenter', () => {
+            // Reset any manually hidden dropdowns on hover
+            if (dropdown) {
+                dropdown.style.display = '';
+            }
+        });
+        
+        menuItem.addEventListener('mouseleave', () => {
+            // Let CSS handle the hiding on mouse leave
+            if (dropdown) {
+                dropdown.style.display = '';
+            }
         });
     });
     
@@ -211,7 +249,6 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (filename.length === 0) {
             filenameValidation.textContent = 'Filename is required for download';
-            downloadButton.disabled = true;
             return false;
         }
         
@@ -220,7 +257,6 @@ document.addEventListener('DOMContentLoaded', () => {
             // If it has an extension, it must be .md
             if (!filename.endsWith('.md')) {
                 filenameValidation.textContent = 'Only .md extension is allowed';
-                downloadButton.disabled = true;
                 return false;
             }
             
@@ -230,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!baseFilenameRegex.test(baseFilename)) {
                 filenameValidation.textContent = 'Filename must be lowercase with hyphens only';
-                downloadButton.disabled = true;
                 return false;
             }
         } else {
@@ -239,14 +274,12 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (!filenameRegex.test(filename)) {
                 filenameValidation.textContent = 'Filename must be lowercase with hyphens only';
-                downloadButton.disabled = true;
                 return false;
             }
         }
         
         // If we got here, the filename is valid
         filenameValidation.textContent = '';
-        downloadButton.disabled = false;
         return true;
     }
     
@@ -429,13 +462,24 @@ document.addEventListener('DOMContentLoaded', () => {
     function copyToClipboard() {
         const content = previewElement.textContent;
         navigator.clipboard.writeText(content).then(() => {
-            const originalText = copyButton.textContent;
-            copyButton.textContent = 'Copied!';
+            statusMessage.textContent = 'Copied to clipboard!';
             setTimeout(() => {
-                copyButton.textContent = originalText;
+                if (uiState.zenMode) {
+                    statusMessage.textContent = 'Zen Mode - Focus on writing';
+                } else {
+                    statusMessage.textContent = 'Version 0.2';
+                }
             }, 2000);
         }).catch(err => {
             console.error('Failed to copy: ', err);
+            statusMessage.textContent = 'Failed to copy to clipboard';
+            setTimeout(() => {
+                if (uiState.zenMode) {
+                    statusMessage.textContent = 'Zen Mode - Focus on writing';
+                } else {
+                    statusMessage.textContent = 'Version 0.2';
+                }
+            }, 2000);
         });
     }
     
@@ -476,10 +520,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 100);
         
         // Show confirmation
-        const originalText = downloadButton.textContent;
-        downloadButton.textContent = 'Downloaded!';
+        statusMessage.textContent = 'File downloaded!';
         setTimeout(() => {
-            downloadButton.textContent = originalText;
+            if (uiState.zenMode) {
+                statusMessage.textContent = 'Zen Mode - Focus on writing';
+            } else {
+                statusMessage.textContent = 'Version 0.1';
+            }
         }, 2000);
     }
 
@@ -780,8 +827,19 @@ document.addEventListener('DOMContentLoaded', () => {
         markdownUpload.value = '';
     }
     
+    // Function to close all menus
+    function closeAllMenus() {
+        const dropdowns = document.querySelectorAll('.dropdown-content');
+        dropdowns.forEach(dropdown => {
+            dropdown.style.display = 'none';
+        });
+    }
+    
     // Handle menu actions
     function handleMenuAction(actionType) {
+        // Close the menu first
+        closeAllMenus();
+        
         switch (actionType) {
             case 'about':
                 alert('MetaEditor v0.1\nA markdown editor with frontmatter support.');
@@ -807,11 +865,8 @@ document.addEventListener('DOMContentLoaded', () => {
             case 'toggle-toolbar':
                 toggleUIElement('toolbar');
                 break;
-            case 'zen-mode':
-                enableZenMode();
-                break;
-            case 'show-all':
-                showAllUIElements();
+            case 'toggle-zen':
+                toggleZenMode();
                 break;
             default:
                 console.log('Unknown action:', actionType);
@@ -824,7 +879,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (savedState) {
             try {
                 const parsedState = JSON.parse(savedState);
-                Object.assign(uiState, parsedState);
+                // Load toolbar state if available
+                if (parsedState.hasOwnProperty('toolbar')) {
+                    uiState.toolbar = parsedState.toolbar;
+                }
+                // Always start in Zen Mode regardless of saved state
+                uiState.zenMode = true;
             } catch (e) {
                 console.error('Error loading UI state:', e);
             }
@@ -842,6 +902,42 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             toolbar.classList.add('hidden');
         }
+        
+        // Apply zen mode state
+        if (uiState.zenMode) {
+            // Hide all form groups except content
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                const contentTextarea = group.querySelector('#content');
+                if (!contentTextarea) {
+                    group.style.display = 'none';
+                }
+            });
+            
+            // Hide the frontmatter header
+            const frontmatterHeader = document.querySelector('.input-section h2');
+            if (frontmatterHeader) {
+                frontmatterHeader.style.display = 'none';
+            }
+            
+            statusMessage.textContent = 'Zen Mode - Focus on writing';
+        } else {
+            // Show all form groups
+            const formGroups = document.querySelectorAll('.form-group');
+            formGroups.forEach(group => {
+                group.style.display = '';
+            });
+            
+            // Show the frontmatter header
+            const frontmatterHeader = document.querySelector('.input-section h2');
+            if (frontmatterHeader) {
+                frontmatterHeader.style.display = '';
+            }
+            
+            if (statusMessage.textContent === 'Zen Mode - Focus on writing') {
+                statusMessage.textContent = 'Version 0.1';
+            }
+        }
     }
     
     function toggleUIElement(elementName) {
@@ -849,25 +945,35 @@ document.addEventListener('DOMContentLoaded', () => {
             uiState[elementName] = !uiState[elementName];
             applyUIState();
             saveUIState();
+            if (elementName === 'toolbar') {
+                updateToolbarMenuText();
+            }
         }
     }
     
+    function toggleZenMode() {
+        // Toggle between zen mode and show all
+        uiState.zenMode = !uiState.zenMode;
+        applyUIState();
+        saveUIState();
+        updateZenModeMenuText();
+    }
+    
     function enableZenMode() {
-        // Hide all UI elements except the essential ones
+        // Enable zen mode - hide all form fields except content and preview
+        uiState.zenMode = true;
         uiState.toolbar = false;
         applyUIState();
         saveUIState();
-        
-        // You can add more UI elements to hide here as they are implemented
-        alert('Zen Mode enabled. Use View > Show All to restore all UI elements.');
+        updateZenModeMenuText();
     }
     
     function showAllUIElements() {
-        // Show all UI elements
+        // Show all UI elements and exit zen mode
+        uiState.zenMode = false;
         uiState.toolbar = true;
         applyUIState();
         saveUIState();
-        
-        // You can add more UI elements to show here as they are implemented
+        updateZenModeMenuText();
     }
 });
