@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateZenModeMenuText() {
         const zenToggleMenu = document.getElementById('zen-toggle-menu');
         if (zenToggleMenu) {
-            zenToggleMenu.textContent = uiState.zenMode ? 'Show All' : 'Hide All (Zen Mode)';
+            zenToggleMenu.textContent = uiState.zenMode ? 'Show All Meta Data' : 'Hide All (Zen Mode)';
         }
     }
     
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         item.addEventListener('mouseleave', () => {
-            statusMessage.textContent = 'Version 0.1';
+            statusMessage.textContent = 'Version 0.2';
         });
     });
     
@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         
         button.addEventListener('mouseleave', () => {
-            statusMessage.textContent = 'Version 0.1';
+            statusMessage.textContent = 'Version 0.2';
         });
         
         button.addEventListener('click', () => {
@@ -525,7 +525,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (uiState.zenMode) {
                 statusMessage.textContent = 'Zen Mode - Focus on writing';
             } else {
-                statusMessage.textContent = 'Version 0.1';
+                statusMessage.textContent = 'Version 0.2';
             }
         }, 2000);
     }
@@ -842,7 +842,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         switch (actionType) {
             case 'about':
-                alert('MetaEditor v0.1\nA markdown editor with frontmatter support.');
+                alert('MetaEditor v0.2\nA markdown editor with frontmatter support.');
                 break;
             case 'settings':
                 alert('Settings functionality will be implemented in a future version.');
@@ -935,7 +935,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             if (statusMessage.textContent === 'Zen Mode - Focus on writing') {
-                statusMessage.textContent = 'Version 0.1';
+                statusMessage.textContent = 'Version 0.2';
             }
         }
     }
