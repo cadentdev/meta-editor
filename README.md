@@ -16,7 +16,32 @@ You can always run the latest release at https://cadentdev.github.io/meta-editor
 
 ## Installation
 
-To install the Meta Editor code, you can download or clone this repository to your local machine. Then simply open the `index.html` file in your web browser. That's it -- no need to run a web server
+### For End Users
+To use the Meta Editor, you can download or clone this repository to your local machine. Then simply open the `dist/index.html` file in your web browser. That's it -- no need to run a web server or install dependencies.
+
+### For Developers
+If you want to contribute to the project or run the test suite:
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd meta-editor
+   ```
+
+2. **Install development dependencies**
+   ```bash
+   npm install
+   ```
+   This installs Jest and testing libraries for running the comprehensive unit test suite.
+
+3. **Run tests** (optional)
+   ```bash
+   npm test              # Run all tests
+   npm run test:watch    # Run tests in watch mode
+   npm run test:coverage # Generate coverage report
+   ```
+
+The application itself has no runtime dependencies and runs entirely in the browser.
 
 ## Using Meta Editor
 
@@ -31,41 +56,53 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 ## Features
 
 ### Content Management
-- **Frontmatter Management**: Separate input fields for Title, Date, Tags, and Summary
-- **File Name Field**: Track and manage your document filenames
+- **Meta Data Management**: Separate input fields for Title, Date, Tags, and Summary (formerly "Frontmatter")
+- **File Name Field**: Track and manage your document filenames with validation
 - **Header & Footer Templates**: Save and reuse common header and footer content across multiple posts
 - **Advanced Hero Image Support**: Upload or extract featured images with automatic filename and alt text handling
 - **Tag Management**: Visual tag interface with easy addition and removal
-- **Markdown Content Editor**: Write your post content in markdown format
+- **Markdown Content Editor**: Write your post content in markdown format with dynamic viewport-based sizing
 
 ### File Operations
 - **Upload Markdown Files**: Import existing markdown files with YAML frontmatter
 - **Auto-Parse Content**: Automatically extracts frontmatter fields, hero images, and recognizes header/footer content
 - **Smart Image Extraction**: Identifies and extracts the first image in uploaded content as the hero image
 - **Download Markdown**: Export your content as properly formatted markdown files
+- **Copy to Clipboard**: Copy formatted markdown with user feedback in status bar
 
-### User Experience
-- **Mac-Style Menu Bar**: Organized access to all application features
-- **Icon Toolbar**: Quick access to common actions with visual icons
-- **View Menu**: Toggle UI elements and enable Zen Mode for distraction-free editing
-- **Live Preview**: See your formatted post in real-time
-- **Local Storage**: Save your work between browser sessions
-- **Copy to Clipboard**: Easily copy the formatted output
-- **Field Validation**: Ensures proper formatting of all fields
+### User Experience & Interface
+- **Mac-Style Menu Bar**: Organized access to all application features with proper dropdown behavior
+- **Icon Toolbar**: Quick access to common actions with visual icons (independent toggle)
+- **Zen Mode (Default)**: Launches in distraction-free mode showing only Content and Preview
+- **Independent UI Controls**: Separate toggles for toolbar visibility and field visibility
+- **Dynamic Menu Text**: Menu items show current state (Show/Hide All, Show/Hide Toolbar)
+- **Live Preview**: See your formatted post in real-time with dynamic sizing and improved spacing
+- **Local Storage**: Save your work and UI preferences between browser sessions
+- **Field Validation**: Ensures proper formatting of all fields with real-time feedback
 - **Persistent Templates**: Header and footer templates persist across sessions
-- **Status Bar**: Shows contextual information and application version
+- **Status Bar**: Shows contextual information, user feedback, and Zen Mode status
+- **Improved Layout**: Content field positioned at bottom with H2 heading for better workflow
 
 ## Usage
 
-### Creating New Content
-1. Enter a valid filename in the File Name field (lowercase with hyphens)
-2. Fill in the frontmatter fields (Title, Date, Tags, Summary)
-3. Add header content or load a saved header template
-4. Upload a hero image if desired and add alt text
-5. Write your main content in the Content field
+### Getting Started (Zen Mode Default)
+The Meta Editor launches in Zen Mode for distraction-free writing:
+1. Write your main content in the Content field (dynamically sized to use 86% of screen height)
+2. Preview your formatted post in the right panel (automatically matches Content field height)
+3. Use View > "Show All" to access meta data fields when ready
+4. Use View > "Hide Toolbar" to toggle toolbar visibility independently
+5. Fields automatically resize when you change browser window size for optimal writing space
+
+### Creating New Content (Full Interface)
+1. Use View > "Show All" to access all fields
+2. Enter a valid filename in the File Name field (lowercase with hyphens)
+3. Fill in the meta data fields (Title, Date, Tags, Summary)
+4. Add header content or load a saved header template
+5. Upload a hero image if desired and add alt text
 6. Add footer content or load a saved footer template
-7. Preview your formatted post in the right panel
-8. Click "Save" to store your work in the browser's local storage
+7. Write your main content in the Content field (positioned at bottom)
+8. Preview your formatted post in the right panel
+9. Use File > "Save" or toolbar to store your work locally
 
 ### Working with Templates
 1. Create your header or footer content
@@ -79,10 +116,17 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 4. Image filename and alt text are automatically populated in their respective fields
 5. If your file contains content matching saved header/footer templates, they'll be extracted
 
+### Interface Controls
+1. **Zen Mode**: Toggle between focused writing (Content + Preview only) and full interface
+2. **Toolbar**: Independently show/hide the icon toolbar for menu actions
+3. **Menu System**: Access all features through Mac-style menu bar with proper dropdown behavior
+4. **Status Feedback**: Get confirmation messages for copy/download actions in status bar
+
 ### Exporting Your Work
 1. Ensure the File Name field contains a valid filename
-2. Click "Download Markdown" to save your content as a .md file
-3. Or use "Copy to Clipboard" to copy the formatted output
+2. Use File > "Download Markdown Post..." or toolbar icon to save as .md file
+3. Use Edit > "Copy Markdown Post" or toolbar icon to copy formatted output
+4. Status bar provides feedback for successful operations
 
 ## Technologies
 
@@ -93,6 +137,34 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - Marked.js for Markdown rendering
 - js-yaml for YAML frontmatter parsing
 - Blob API for file downloads
+
+## Testing & Quality Assurance
+
+Meta Editor includes a comprehensive Jest-based test suite ensuring code quality and reliability:
+
+### Test Coverage
+- **91 unit tests** covering all major functionality
+- **Validation functions** - Input validation and formatting
+- **UI state management** - Zen mode, toolbar toggles, persistence
+- **Data transformation** - Preview generation, tag management, image extraction
+- **LocalStorage operations** - Data persistence and template management
+- **Menu actions** - All user interactions and workflows
+
+### Running Tests
+```bash
+npm install        # Install Jest and testing dependencies
+npm test          # Run all tests
+npm run test:watch # Development mode with auto-rerun
+npm run test:coverage # Generate detailed coverage report
+```
+
+### Quality Features
+- **Error scenario testing** - Validates error handling and edge cases
+- **Mock-based isolation** - Tests functions independently with controlled inputs
+- **Realistic DOM simulation** - Tests UI interactions with complete DOM structures
+- **API mocking** - Tests browser APIs (clipboard, file operations) safely
+
+See `README-TESTING.md` for detailed testing documentation.
 
 ## Project Structure
 
@@ -124,6 +196,32 @@ The Meta Editor uses a three-tiered testing approach:
 ## Getting Started
 
 Simply open `dist/index.html` in your web browser to start using the editor. No server setup or installation required.
+
+## Recent Improvements (v0.2)
+
+### Interface Enhancements
+- **Zen Mode Default**: Application now launches in distraction-free writing mode
+- **Independent UI Controls**: Separate toggles for toolbar and field visibility
+- **Improved Layout**: Content field moved to bottom with H2 heading for better workflow
+- **Enhanced Spacing**: Added consistent 1.5625rem padding above all H2 headings for visual hierarchy
+- **Dynamic Viewport Sizing**: Content and Preview fields use 86% of available screen height
+
+### User Experience
+- **Dynamic Menu Text**: Menu items now show current state (Show/Hide All, Show/Hide Toolbar)
+- **Proper Menu Behavior**: Dropdowns close after selecting items, as expected
+- **Status Bar Feedback**: Copy and download actions provide confirmation in status bar
+- **Streamlined Interface**: Removed duplicate buttons, consolidated functionality in menu/toolbar
+- **Immersive Writing**: Fields automatically scale to maximize available screen space
+- **Responsive Design**: Interface adapts perfectly to different screen sizes and browser windows
+
+### Technical Improvements
+- **Modern CSS Units**: Converted from px to rem/vw for better accessibility and scaling
+- **Viewport-Based Sizing**: Dynamic height calculation using calc(86vh - 15rem)
+- **Independent State Management**: Toolbar and Zen Mode toggles work independently
+- **Persistent UI Preferences**: Interface state saves between sessions (except Zen Mode always defaults on)
+- **Responsive Typography**: All font sizes and spacing scale with user preferences
+- **Git Integration**: Added .DS_Store and system files to .gitignore
+- **Code Organization**: Improved JavaScript structure and removed unused button references
 
 ## Field Details
 

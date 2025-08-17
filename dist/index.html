@@ -26,23 +26,22 @@
                 <span class="menu-title">File</span>
                 <div class="dropdown-content">
                     <div class="menu-action" data-action="new-post">New Post</div>
-                    <div class="menu-action" data-action="open-markdown">Open Markdown Post...</div>
+                    <div class="menu-action" data-action="open-markdown">Open Post...</div>
                     <div class="menu-action" data-action="save">Save</div>
-                    <div class="menu-action" data-action="download-markdown">Download Markdown Post...</div>
+                    <div class="menu-action" data-action="download-markdown">Download Post...</div>
                 </div>
             </div>
             <div class="menu-item">
                 <span class="menu-title">Edit</span>
                 <div class="dropdown-content">
-                    <div class="menu-action" data-action="copy-markdown">Copy Markdown Post</div>
+                    <div class="menu-action" data-action="copy-markdown">Copy Markdown Preview</div>
                 </div>
             </div>
             <div class="menu-item">
                 <span class="menu-title">View</span>
                 <div class="dropdown-content">
-                    <div class="menu-action" data-action="toggle-toolbar">Toolbar</div>
-                    <div class="menu-action" data-action="zen-mode">Hide All (Zen Mode)</div>
-                    <div class="menu-action" data-action="show-all">Show All</div>
+                    <div class="menu-action" data-action="toggle-toolbar" id="toolbar-toggle-menu">Hide Toolbar</div>
+                    <div class="menu-action" data-action="toggle-zen" id="zen-toggle-menu">Show All Meta Data</div>
                 </div>
             </div>
         </div>
@@ -69,7 +68,7 @@
         
         <div class="editor-container">
             <div class="input-section">
-                <h2>Frontmatter</h2>
+                <h2>Meta Data</h2>
                 
                 <div class="form-group">
                     <label for="filename">File Name</label>
@@ -133,11 +132,6 @@
                 </div>
                 
                 <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea id="content" placeholder="Enter markdown content..." rows="10"></textarea>
-                </div>
-                
-                <div class="form-group">
                     <label for="footer">Footer</label>
                     <div class="template-actions">
                         <button id="save-footer-template" class="template-button" title="Save as default footer">Save Default</button>
@@ -145,14 +139,15 @@
                     </div>
                     <textarea id="footer" placeholder="Enter footer content..." rows="3"></textarea>
                 </div>
+                
+                <div class="form-group">
+                    <h2>Content</h2>
+                    <textarea id="content" placeholder="Enter markdown content..." rows="10"></textarea>
+                </div>
             </div>
             
             <div class="preview-section">
                 <h2>Preview</h2>
-                <div class="preview-actions">
-                    <button id="copy-button">Copy to Clipboard</button>
-                    <button id="download-button" disabled>Download Markdown</button>
-                </div>
                 <div id="preview" class="preview-content"></div>
             </div>
         </div>
@@ -162,7 +157,7 @@
     </div>
     
     <div class="status-bar">
-        <div id="status-message">Version 0.1</div>
+        <div id="status-message">Version 0.2</div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>

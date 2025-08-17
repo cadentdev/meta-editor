@@ -1,10 +1,10 @@
 /* Menu Bar Styles */
 .header-bar {
     background-color: #f5f5f5;
-    padding: 10px 0;
+    padding: 0.625rem 0;
     text-align: center;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
 
 .menu-bar {
@@ -18,7 +18,7 @@
 
 .menu-item {
     position: relative;
-    padding: 8px 15px;
+    padding: 0.5rem 0.9375rem;
     cursor: pointer;
 }
 
@@ -28,7 +28,7 @@
 
 .menu-title {
     font-weight: 500;
-    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 .dropdown-content {
@@ -37,10 +37,10 @@
     left: 0;
     top: 100%;
     background-color: #fff;
-    min-width: 200px;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    min-width: 12.5rem;
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
     z-index: 101;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     overflow: hidden;
 }
 
@@ -49,8 +49,8 @@
 }
 
 .menu-action {
-    padding: 10px 15px;
-    font-size: 14px;
+    padding: 0.625rem 0.9375rem;
+    font-size: 0.875rem;
     transition: background-color 0.2s;
 }
 
@@ -62,8 +62,8 @@
 /* Status Bar Styles */
 .status-bar {
     background-color: #f5f5f5;
-    padding: 5px 10px;
-    font-size: 12px;
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.75rem;
     color: #666;
     border-top: 1px solid #ddd;
     position: fixed;
@@ -73,36 +73,36 @@
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    height: 25px;
+    height: 1.5625rem;
 }
 
 #status-message {
-    margin-left: 10px;
+    margin-left: 0.625rem;
 }
 
 /* Add padding to body to account for fixed status bar */
 body {
-    padding-bottom: 30px;
+    padding-bottom: 1.875rem;
 }
 
 /* Toolbar Styles */
 .toolbar {
     display: flex;
     background-color: #f8f8f8;
-    padding: 8px 15px;
+    padding: 0.5rem 0.9375rem;
     border-bottom: 1px solid #ddd;
     align-items: center;
 }
 
 .toolbar-button {
-    width: 36px;
-    height: 36px;
+    width: 2.25rem;
+    height: 2.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     cursor: pointer;
-    margin-right: 5px;
+    margin-right: 0.3125rem;
     transition: background-color 0.2s;
 }
 
@@ -111,15 +111,15 @@ body {
 }
 
 .toolbar-button i {
-    font-size: 16px;
+    font-size: 1rem;
     color: #555;
 }
 
 .toolbar-separator {
     width: 1px;
-    height: 24px;
+    height: 1.5rem;
     background-color: #ddd;
-    margin: 0 10px;
+    margin: 0 0.625rem;
 }
 
 /* Hide class for toggling visibility */
@@ -128,7 +128,7 @@ body {
 }
 
 /* Responsive design for menu */
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
     .menu-bar {
         flex-direction: column;
         align-items: flex-start;
@@ -136,7 +136,7 @@ body {
     
     .menu-item {
         width: 100%;
-        margin-bottom: 5px;
+        margin-bottom: 0.3125rem;
     }
     
     .dropdown-content {
