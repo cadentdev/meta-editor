@@ -10,6 +10,7 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 - [ ] Save, load and edit basic AI settings (Ollama endpoint, preferred model)
 - [ ] Use Ollama API
+- [ ] Generate from Generate menu
 - [ ] Generate Summary
 - [ ] Generate Multiple Title
 - [ ] Generate File Name
@@ -19,8 +20,16 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 ### BYOK AI Generation
 
-- [ ] Help menu
+- [ ] Add Generation buttons
 - [ ] Use Claude API key (add to settings)
+
+## Help & UI
+
+- [ ] Create help JS modal dialog box
+- [ ] Add help menu
+- [ ] Add help icon to toolbar
+- [ ] Add settings icon to toolbar
+- [ ] Update About dialog box with links, use JS modals instead of browser modal.
 
 ### Collaboration & Sync**
 
