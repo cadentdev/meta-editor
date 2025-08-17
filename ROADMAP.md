@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-Meta Editor is a web-based Markdown editor focused on preparing blog posts with proper YAML frontmatter and metadata. The application emphasizes privacy (client-side only), accessibility, and a distraction-free writing experience.
+Meta Editor is a web-based Markdown editor focused on preparing blog posts with well-formatted and useful YAML frontmatter and metadata. The application emphasizes privacy (client-side only), accessibility, and a distraction-free writing experience.
 
 ## Upcoming Development Priorities
 
@@ -10,7 +10,8 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 - [ ] Save, load and edit basic AI settings (Ollama endpoint, preferred model)
 - [ ] Use Ollama API
-- [ ] Generate from Generate menu
+- [ ] Generate meta data from Generate menu
+- [ ] Create AI Generation Dialog box
 - [ ] Generate Summary
 - [ ] Generate Multiple Title
 - [ ] Generate File Name
@@ -20,7 +21,7 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 ### BYOK AI Generation
 
-- [ ] Add Generation buttons
+- [ ] Add Generate button to toolbar
 - [ ] Use Claude API key (add to settings)
 
 ## Help & UI
@@ -30,12 +31,12 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 - [ ] Add help icon to toolbar
 - [ ] Add settings icon to toolbar
 - [ ] Update About dialog box with links, use JS modals instead of browser modal.
+- [ ] Create program icon and favicon
 
 ### Collaboration & Sync**
 
 - [ ] Optional cloud sync (maintaining privacy focus)
-- [ ] Export to popular blogging platforms
-- [ ] Team collaboration features
+- [ ] Export to popular blogging platforms, such as the WordPress REST API
 - [ ] Version history
 
 ### Mobile & Accessibility
