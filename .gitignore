@@ -3,6 +3,16 @@
 *.sass.map
 *.scss.map
 
+# Node.js dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test coverage reports
+coverage/
+*.lcov
+
 # macOS
 .DS_Store
 .DS_Store?

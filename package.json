@@ -1,0 +1,28 @@
+{
+  "name": "meta-editor",
+  "version": "0.2.0",
+  "description": "A web-based editor for preparing blog posts with proper YAML frontmatter and metadata",
+  "main": "dist/index.html",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "keywords": ["markdown", "editor", "frontmatter", "blog", "yaml"],
+  "author": "CadentDev",
+  "license": "MIT",
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "@testing-library/jest-dom": "^6.1.4"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": ["<rootDir>/tests/setup.js"],
+    "collectCoverageFrom": [
+      "dist/script.js"
+    ],
+    "coverageDirectory": "coverage",
+    "coverageReporters": ["text", "lcov", "html"]
+  }
+}

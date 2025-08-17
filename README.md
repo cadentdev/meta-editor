@@ -16,7 +16,32 @@ You can always run the latest release at https://cadentdev.github.io/meta-editor
 
 ## Installation
 
-To install the Meta Editor code, you can download or clone this repository to your local machine. Then simply open the `index.html` file in your web browser. That's it -- no need to run a web server
+### For End Users
+To use the Meta Editor, you can download or clone this repository to your local machine. Then simply open the `dist/index.html` file in your web browser. That's it -- no need to run a web server or install dependencies.
+
+### For Developers
+If you want to contribute to the project or run the test suite:
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd meta-editor
+   ```
+
+2. **Install development dependencies**
+   ```bash
+   npm install
+   ```
+   This installs Jest and testing libraries for running the comprehensive unit test suite.
+
+3. **Run tests** (optional)
+   ```bash
+   npm test              # Run all tests
+   npm run test:watch    # Run tests in watch mode
+   npm run test:coverage # Generate coverage report
+   ```
+
+The application itself has no runtime dependencies and runs entirely in the browser.
 
 ## Using Meta Editor
 
@@ -112,6 +137,34 @@ The Meta Editor launches in Zen Mode for distraction-free writing:
 - Marked.js for Markdown rendering
 - js-yaml for YAML frontmatter parsing
 - Blob API for file downloads
+
+## Testing & Quality Assurance
+
+Meta Editor includes a comprehensive Jest-based test suite ensuring code quality and reliability:
+
+### Test Coverage
+- **91 unit tests** covering all major functionality
+- **Validation functions** - Input validation and formatting
+- **UI state management** - Zen mode, toolbar toggles, persistence
+- **Data transformation** - Preview generation, tag management, image extraction
+- **LocalStorage operations** - Data persistence and template management
+- **Menu actions** - All user interactions and workflows
+
+### Running Tests
+```bash
+npm install        # Install Jest and testing dependencies
+npm test          # Run all tests
+npm run test:watch # Development mode with auto-rerun
+npm run test:coverage # Generate detailed coverage report
+```
+
+### Quality Features
+- **Error scenario testing** - Validates error handling and edge cases
+- **Mock-based isolation** - Tests functions independently with controlled inputs
+- **Realistic DOM simulation** - Tests UI interactions with complete DOM structures
+- **API mocking** - Tests browser APIs (clipboard, file operations) safely
+
+See `README-TESTING.md` for detailed testing documentation.
 
 ## Project Structure
 
