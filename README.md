@@ -36,7 +36,7 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - **Header & Footer Templates**: Save and reuse common header and footer content across multiple posts
 - **Advanced Hero Image Support**: Upload or extract featured images with automatic filename and alt text handling
 - **Tag Management**: Visual tag interface with easy addition and removal
-- **Markdown Content Editor**: Write your post content in markdown format with expanded height matching preview
+- **Markdown Content Editor**: Write your post content in markdown format with dynamic viewport-based sizing
 
 ### File Operations
 - **Upload Markdown Files**: Import existing markdown files with YAML frontmatter
@@ -51,7 +51,7 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - **Zen Mode (Default)**: Launches in distraction-free mode showing only Content and Preview
 - **Independent UI Controls**: Separate toggles for toolbar visibility and field visibility
 - **Dynamic Menu Text**: Menu items show current state (Show/Hide All, Show/Hide Toolbar)
-- **Live Preview**: See your formatted post in real-time with improved spacing
+- **Live Preview**: See your formatted post in real-time with dynamic sizing and improved spacing
 - **Local Storage**: Save your work and UI preferences between browser sessions
 - **Field Validation**: Ensures proper formatting of all fields with real-time feedback
 - **Persistent Templates**: Header and footer templates persist across sessions
@@ -62,10 +62,11 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 
 ### Getting Started (Zen Mode Default)
 The Meta Editor launches in Zen Mode for distraction-free writing:
-1. Write your main content in the Content field (bottom of interface)
-2. Preview your formatted post in the right panel
+1. Write your main content in the Content field (dynamically sized to use 86% of screen height)
+2. Preview your formatted post in the right panel (automatically matches Content field height)
 3. Use View > "Show All" to access meta data fields when ready
 4. Use View > "Hide Toolbar" to toggle toolbar visibility independently
+5. Fields automatically resize when you change browser window size for optimal writing space
 
 ### Creating New Content (Full Interface)
 1. Use View > "Show All" to access all fields
@@ -149,18 +150,23 @@ Simply open `dist/index.html` in your web browser to start using the editor. No 
 - **Zen Mode Default**: Application now launches in distraction-free writing mode
 - **Independent UI Controls**: Separate toggles for toolbar and field visibility
 - **Improved Layout**: Content field moved to bottom with H2 heading for better workflow
-- **Enhanced Spacing**: Added consistent padding above all H2 headings for better visual hierarchy
+- **Enhanced Spacing**: Added consistent 1.5625rem padding above all H2 headings for visual hierarchy
+- **Dynamic Viewport Sizing**: Content and Preview fields use 86% of available screen height
 
 ### User Experience
 - **Dynamic Menu Text**: Menu items now show current state (Show/Hide All, Show/Hide Toolbar)
 - **Proper Menu Behavior**: Dropdowns close after selecting items, as expected
 - **Status Bar Feedback**: Copy and download actions provide confirmation in status bar
 - **Streamlined Interface**: Removed duplicate buttons, consolidated functionality in menu/toolbar
-- **Content Field Sizing**: Expanded textarea height to match preview panel
+- **Immersive Writing**: Fields automatically scale to maximize available screen space
+- **Responsive Design**: Interface adapts perfectly to different screen sizes and browser windows
 
 ### Technical Improvements
+- **Modern CSS Units**: Converted from px to rem/vw for better accessibility and scaling
+- **Viewport-Based Sizing**: Dynamic height calculation using calc(86vh - 15rem)
 - **Independent State Management**: Toolbar and Zen Mode toggles work independently
 - **Persistent UI Preferences**: Interface state saves between sessions (except Zen Mode always defaults on)
+- **Responsive Typography**: All font sizes and spacing scale with user preferences
 - **Git Integration**: Added .DS_Store and system files to .gitignore
 - **Code Organization**: Improved JavaScript structure and removed unused button references
 
