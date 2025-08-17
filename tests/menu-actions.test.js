@@ -192,7 +192,7 @@ const createMenuActionFunctions = () => {
       const day = String(now.getDate()).padStart(2, '0');
       const hours = String(now.getHours()).padStart(2, '0');
       const minutes = String(now.getMinutes()).padStart(2, '0');
-      dateInput.value = `\${year}-\${month}-\${day}T\${hours}:\${minutes}`;
+      dateInput.value = `${year}-${month}-${day}T${hours}:${minutes}`;
       
       tags = [];
       tagsContainer.innerHTML = '';
@@ -506,7 +506,7 @@ describe('Menu Action Functions', () => {
       const month = String(now.getMonth() + 1).padStart(2, '0');
       const day = String(now.getDate()).padStart(2, '0');
       
-      expect(dateValue).toContain(`\${year}-\${month}-\${day}`);
+      expect(dateValue).toContain(`${year}-${month}-${day}`);
       expect(dateValue).toMatch(/T\\d{2}:\\d{2}$/);
     });
 

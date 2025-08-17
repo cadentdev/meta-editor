@@ -100,7 +100,7 @@ const createValidationFunctions = () => {
   function validateSummary() {
     const summary = summaryInput.value.trim();
     const charCount = summary.length;
-    summaryCount.textContent = `\${charCount}/250`;
+    summaryCount.textContent = `${charCount}/250`;
 
     if (summary.length === 0) {
       summaryValidation.textContent = 'Summary is required';
@@ -122,7 +122,7 @@ const createValidationFunctions = () => {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     
-    return `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
 
   return {

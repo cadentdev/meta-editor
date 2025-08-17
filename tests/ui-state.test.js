@@ -184,9 +184,8 @@ describe('UI State Management Functions', () => {
   beforeEach(() => {
     mockDOM();
     uiStateFunctions = createUIStateFunctions();
-    // Reset localStorage mock
-    localStorage.getItem.mockReturnValue(null);
-    localStorage.setItem.mockClear();
+    // Reset mocks
+    jest.clearAllMocks();
   });
 
   describe('updateZenModeMenuText', () => {

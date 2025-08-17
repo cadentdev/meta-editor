@@ -48,13 +48,13 @@ const createDataTransformationFunctions = () => {
     const hours = String(date.getHours()).padStart(2, '0');
     const minutes = String(date.getMinutes()).padStart(2, '0');
     
-    return `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
   }
 
   // Function to extract hero image from markdown content
   function extractHeroImage(content) {
     // Look for markdown image syntax: ![alt text](image-path){optional-attributes}
-    const imageRegex = /!\\[([^\\]]*)\\]\\(([^\\)]+)\\)(\\{[^\\}]*\\})?/;
+    const imageRegex = /!\[([^\]]*)\]\(([^\)]+)\)(\{[^\}]*\})?/;
     const match = content.match(imageRegex);
     
     if (match) {
@@ -68,9 +68,9 @@ const createDataTransformationFunctions = () => {
       
       // Extract just the filename from the path
       // Handle paths like {static}/images/filename.jpg or regular paths
-      const staticMatch = imagePath.match(/\\{static\\}\\/images\\/([^\\s]+)/);
-      const regularMatch = imagePath.match(/\\/images\\/([^\\s]+)/);
-      const simpleMatch = imagePath.match(/([^\\/\\\\\\s]+\\.(?:jpg|jpeg|png|gif|webp|svg))$/i);
+      const staticMatch = imagePath.match(/\{static\}\/images\/([^\s]+)/);
+      const regularMatch = imagePath.match(/\/images\/([^\s]+)/);
+      const simpleMatch = imagePath.match(/([^\/\\\s]+\.(?:jpg|jpeg|png|gif|webp|svg))$/i);
       
       let filename = '';
       if (staticMatch && staticMatch[1]) {
@@ -105,10 +105,10 @@ const createDataTransformationFunctions = () => {
     const summary = summaryInput.value.trim();
 
     let frontmatter = '---\\n';
-    if (title) frontmatter += `Title: \${title}\\n`;
-    if (date) frontmatter += `Date: \${date}\\n`;
-    if (tagsString) frontmatter += `Tags: \${tagsString}\\n`;
-    if (summary) frontmatter += `Summary: \${summary}\\n`;
+    if (title) frontmatter += `Title: ${title}\\n`;
+    if (date) frontmatter += `Date: ${date}\\n`;
+    if (tagsString) frontmatter += `Tags: ${tagsString}\\n`;
+    if (summary) frontmatter += `Summary: ${summary}\\n`;
     frontmatter += '---\\n\\n';
 
     // Generate content with hero image if available
@@ -122,10 +122,10 @@ const createDataTransformationFunctions = () => {
     // Add hero image if available
     if (heroImageData && imageAltInput.value.trim()) {
       // If we have actual image data from upload
-      content += `![\${imageAltInput.value.trim()}]({static}/images/\${heroImageData.name}){: .image-process-crisp}\\n\\n`;
+      content += `![${imageAltInput.value.trim()}]({static}/images/${heroImageData.name}){: .image-process-crisp}\\n\\n`;
     } else if (imageFilenameInput.value.trim() && imageAltInput.value.trim()) {
       // If we have extracted image filename and alt text
-      content += `![\${imageAltInput.value.trim()}]({static}/images/\${imageFilenameInput.value.trim()}){: .image-process-crisp}\\n\\n`;
+      content += `![${imageAltInput.value.trim()}]({static}/images/${imageFilenameInput.value.trim()}){: .image-process-crisp}\\n\\n`;
     }
     
     content += contentInput.value;
@@ -171,8 +171,8 @@ const createDataTransformationFunctions = () => {
       const tagElement = document.createElement('span');
       tagElement.classList.add('tag');
       tagElement.innerHTML = `
-        \${tag}
-        <span class="tag-remove" data-index="\${index}">×</span>
+        ${tag}
+        <span class="tag-remove" data-index="${index}">×</span>
       `;
       tagsContainer.appendChild(tagElement);
     });

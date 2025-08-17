@@ -95,8 +95,8 @@ const createLocalStorageFunctions = () => {
       const tagElement = document.createElement('span');
       tagElement.classList.add('tag');
       tagElement.innerHTML = `
-        \${tag}
-        <span class="tag-remove" data-index="\${index}">×</span>
+        ${tag}
+        <span class="tag-remove" data-index="${index}">×</span>
       `;
       tagsContainer.appendChild(tagElement);
     });
@@ -287,11 +287,7 @@ describe('LocalStorage Functions', () => {
     mockDOM();
     localStorageFunctions = createLocalStorageFunctions();
     // Reset localStorage mock
-    localStorage.getItem.mockReturnValue(null);
-    localStorage.setItem.mockClear();
-    localStorage.removeItem.mockClear();
-    alert.mockClear();
-    confirm.mockClear();
+    jest.clearAllMocks();
   });
 
   describe('saveToLocalStorage', () => {
