@@ -84,9 +84,10 @@ const createDataTransformationFunctions = () => {
         filename = imagePath;
       }
       
-      // Return the modified content and image info
+      // Return the modified content and image info (clean up extra newlines)
+      const cleanedContent = content.replace(fullMatch, '').replace(/\n\n\n+/g, '\n\n').trim();
       return { 
-        content: content.replace(fullMatch, '').trim(),
+        content: cleanedContent,
         found: true,
         altText: altText,
         filename: filename

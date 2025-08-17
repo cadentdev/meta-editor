@@ -1,13 +1,21 @@
 require('@testing-library/jest-dom');
 
-// Mock localStorage
-const localStorageMock = {
-  getItem: jest.fn(),
-  setItem: jest.fn(),
-  removeItem: jest.fn(),
-  clear: jest.fn(),
+// Mock localStorage with simple implementation
+global.localStorage = {
+  store: {},
+  getItem: function(key) {
+    return this.store[key] || null;
+  },
+  setItem: function(key, value) {
+    this.store[key] = value;
+  },
+  removeItem: function(key) {
+    delete this.store[key];
+  },
+  clear: function() {
+    this.store = {};
+  }
 };
-global.localStorage = localStorageMock;
 
 // Mock navigator.clipboard
 global.navigator.clipboard = {
@@ -62,5 +70,5 @@ global.jsyaml = {
 // Reset all mocks before each test
 beforeEach(() => {
   jest.clearAllMocks();
-  localStorageMock.getItem.mockReturnValue(null);
+  global.localStorage.clear();
 });

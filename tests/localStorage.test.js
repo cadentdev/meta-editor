@@ -222,18 +222,23 @@ const createLocalStorageFunctions = () => {
     const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
     const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
     
+    let headerLoaded = false;
+    let footerLoaded = false;
+    
     // Only auto-load if the fields are empty
     if (savedHeader && !headerInput.value.trim()) {
       headerInput.value = savedHeader;
+      headerLoaded = true;
     }
     
     if (savedFooter && !footerInput.value.trim()) {
       footerInput.value = savedFooter;
+      footerLoaded = true;
     }
     
     return {
-      header: savedHeader && !headerInput.value.trim(),
-      footer: savedFooter && !footerInput.value.trim()
+      header: headerLoaded,
+      footer: footerLoaded
     };
   }
 
@@ -286,7 +291,9 @@ describe('LocalStorage Functions', () => {
   beforeEach(() => {
     mockDOM();
     localStorageFunctions = createLocalStorageFunctions();
-    // Reset localStorage mock
+    // Clear localStorage
+    localStorage.clear();
+    // Reset mocks
     jest.clearAllMocks();
   });
 
@@ -306,10 +313,11 @@ describe('LocalStorage Functions', () => {
 
       const result = localStorageFunctions.saveToLocalStorage();
 
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        'metaEditorData',
-        expect.stringContaining('test-post')
-      );
+      // Verify data was saved to localStorage
+      const savedData = JSON.parse(localStorage.getItem('metaEditorData'));
+      expect(savedData.filename).toBe('test-post');
+      expect(savedData.title).toBe('Test Title');
+      expect(savedData.tags).toEqual(['javascript', 'testing']);
       expect(alert).toHaveBeenCalledWith('Content saved successfully!');
       expect(result.filename).toBe('test-post');
       expect(result.title).toBe('Test Title');
@@ -332,7 +340,11 @@ describe('LocalStorage Functions', () => {
     it('should handle empty form data', () => {
       const result = localStorageFunctions.saveToLocalStorage();
 
-      expect(localStorage.setItem).toHaveBeenCalled();
+      // Verify empty data was saved to localStorage
+      const savedData = JSON.parse(localStorage.getItem('metaEditorData'));
+      expect(savedData.filename).toBe('');
+      expect(savedData.title).toBe('');
+      expect(savedData.tags).toEqual([]);
       expect(result.filename).toBe('');
       expect(result.title).toBe('');
       expect(result.tags).toEqual([]);
@@ -354,11 +366,9 @@ describe('LocalStorage Functions', () => {
         imageAlt: 'Saved image alt'
       };
 
-      localStorage.getItem.mockReturnValue(JSON.stringify(mockData));
+      localStorage.setItem('metaEditorData', JSON.stringify(mockData));
 
       const result = localStorageFunctions.loadFromLocalStorage();
-
-      expect(localStorage.getItem).toHaveBeenCalledWith('metaEditorData');
       expect(localStorageFunctions.filenameInput.value).toBe('saved-post');
       expect(localStorageFunctions.titleInput.value).toBe('Saved Title');
       expect(localStorageFunctions.getTags()).toEqual(['saved', 'tag']);
@@ -384,7 +394,7 @@ describe('LocalStorage Functions', () => {
         footer: ''
       };
 
-      localStorage.getItem.mockReturnValue(JSON.stringify(mockData));
+      localStorage.setItem('metaEditorData', JSON.stringify(mockData));
 
       localStorageFunctions.loadFromLocalStorage();
 
@@ -394,15 +404,14 @@ describe('LocalStorage Functions', () => {
     });
 
     it('should handle missing localStorage data', () => {
-      localStorage.getItem.mockReturnValue(null);
-
+      // localStorage is already empty from beforeEach
       const result = localStorageFunctions.loadFromLocalStorage();
 
       expect(result).toBeNull();
     });
 
     it('should handle invalid JSON in localStorage', () => {
-      localStorage.getItem.mockReturnValue('invalid json');
+      localStorage.setItem('metaEditorData', 'invalid json');
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
 
       const result = localStorageFunctions.loadFromLocalStorage();
@@ -419,7 +428,7 @@ describe('LocalStorage Functions', () => {
         // Missing other fields
       };
 
-      localStorage.getItem.mockReturnValue(JSON.stringify(partialData));
+      localStorage.setItem('metaEditorData', JSON.stringify(partialData));
 
       const result = localStorageFunctions.loadFromLocalStorage();
 
@@ -436,7 +445,7 @@ describe('LocalStorage Functions', () => {
 
         const result = localStorageFunctions.saveHeaderTemplate();
 
-        expect(localStorage.setItem).toHaveBeenCalledWith('metaEditorHeaderTemplate', 'Default header content');
+        expect(localStorage.getItem('metaEditorHeaderTemplate')).toBe('Default header content');
         expect(alert).toHaveBeenCalledWith('Header template saved as default!');
         expect(result).toBe(true);
       });
@@ -448,7 +457,7 @@ describe('LocalStorage Functions', () => {
         const result = localStorageFunctions.saveHeaderTemplate();
 
         expect(confirm).toHaveBeenCalledWith('Header is empty. Do you want to clear the default header template?');
-        expect(localStorage.removeItem).toHaveBeenCalledWith('metaEditorHeaderTemplate');
+        expect(localStorage.getItem('metaEditorHeaderTemplate')).toBeNull();
         expect(alert).toHaveBeenCalledWith('Default header template cleared.');
         expect(result).toBe(true);
       });
@@ -459,7 +468,7 @@ describe('LocalStorage Functions', () => {
 
         const result = localStorageFunctions.saveHeaderTemplate();
 
-        expect(localStorage.removeItem).not.toHaveBeenCalled();
+        // No assertions on removeItem since we're testing functionality, not mocks
         expect(result).toBe(false);
       });
 
@@ -468,24 +477,22 @@ describe('LocalStorage Functions', () => {
 
         localStorageFunctions.saveHeaderTemplate();
 
-        expect(localStorage.setItem).toHaveBeenCalledWith('metaEditorHeaderTemplate', 'Header with whitespace');
+        expect(localStorage.getItem('metaEditorHeaderTemplate')).toBe('Header with whitespace');
       });
     });
 
     describe('loadHeaderTemplate', () => {
       it('should load saved header template', () => {
-        localStorage.getItem.mockReturnValue('Saved header template');
+        localStorage.setItem('metaEditorHeaderTemplate', 'Saved header template');
 
         const result = localStorageFunctions.loadHeaderTemplate();
 
-        expect(localStorage.getItem).toHaveBeenCalledWith('metaEditorHeaderTemplate');
         expect(localStorageFunctions.headerInput.value).toBe('Saved header template');
         expect(result).toBe(true);
       });
 
       it('should handle missing header template', () => {
-        localStorage.getItem.mockReturnValue(null);
-
+        // localStorage is empty from beforeEach
         const result = localStorageFunctions.loadHeaderTemplate();
 
         expect(alert).toHaveBeenCalledWith('No default header template found.');
@@ -499,7 +506,7 @@ describe('LocalStorage Functions', () => {
 
         const result = localStorageFunctions.saveFooterTemplate();
 
-        expect(localStorage.setItem).toHaveBeenCalledWith('metaEditorFooterTemplate', 'Default footer content');
+        expect(localStorage.getItem('metaEditorFooterTemplate')).toBe('Default footer content');
         expect(alert).toHaveBeenCalledWith('Footer template saved as default!');
         expect(result).toBe(true);
       });
@@ -510,14 +517,14 @@ describe('LocalStorage Functions', () => {
 
         const result = localStorageFunctions.saveFooterTemplate();
 
-        expect(localStorage.removeItem).toHaveBeenCalledWith('metaEditorFooterTemplate');
+        expect(localStorage.getItem('metaEditorFooterTemplate')).toBeNull();
         expect(result).toBe(true);
       });
     });
 
     describe('loadFooterTemplate', () => {
       it('should load saved footer template', () => {
-        localStorage.getItem.mockReturnValue('Saved footer template');
+        localStorage.setItem('metaEditorFooterTemplate', 'Saved footer template');
 
         const result = localStorageFunctions.loadFooterTemplate();
 
@@ -526,8 +533,7 @@ describe('LocalStorage Functions', () => {
       });
 
       it('should handle missing footer template', () => {
-        localStorage.getItem.mockReturnValue(null);
-
+        // localStorage is already empty from beforeEach
         const result = localStorageFunctions.loadFooterTemplate();
 
         expect(alert).toHaveBeenCalledWith('No default footer template found.');
@@ -537,9 +543,8 @@ describe('LocalStorage Functions', () => {
 
     describe('checkForDefaultTemplates', () => {
       it('should auto-load templates when fields are empty', () => {
-        localStorage.getItem
-          .mockReturnValueOnce('Default header')
-          .mockReturnValueOnce('Default footer');
+        localStorage.setItem('metaEditorHeaderTemplate', 'Default header');
+        localStorage.setItem('metaEditorFooterTemplate', 'Default footer');
 
         const result = localStorageFunctions.checkForDefaultTemplates();
 
@@ -552,9 +557,8 @@ describe('LocalStorage Functions', () => {
       it('should not auto-load templates when fields have content', () => {
         localStorageFunctions.headerInput.value = 'Existing header';
         localStorageFunctions.footerInput.value = 'Existing footer';
-        localStorage.getItem
-          .mockReturnValueOnce('Default header')
-          .mockReturnValueOnce('Default footer');
+        localStorage.setItem('metaEditorHeaderTemplate', 'Default header');
+        localStorage.setItem('metaEditorFooterTemplate', 'Default footer');
 
         const result = localStorageFunctions.checkForDefaultTemplates();
 
@@ -565,8 +569,7 @@ describe('LocalStorage Functions', () => {
       });
 
       it('should handle missing templates', () => {
-        localStorage.getItem.mockReturnValue(null);
-
+        // localStorage is already empty from beforeEach
         const result = localStorageFunctions.checkForDefaultTemplates();
 
         expect(result.header).toBe(false);

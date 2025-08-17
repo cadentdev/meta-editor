@@ -219,28 +219,25 @@ describe('UI State Management Functions', () => {
   describe('loadUIState', () => {
     it('should load UI state from localStorage', () => {
       const mockState = { toolbar: false, zenMode: false };
-      localStorage.getItem.mockReturnValue(JSON.stringify(mockState));
+      localStorage.setItem('metaEditorUIState', JSON.stringify(mockState));
       
       uiStateFunctions.loadUIState();
       
-      expect(localStorage.getItem).toHaveBeenCalledWith('metaEditorUIState');
       expect(uiStateFunctions.uiState.toolbar).toBe(false);
       expect(uiStateFunctions.uiState.zenMode).toBe(true); // Always true regardless of saved state
     });
 
     it('should handle missing localStorage data', () => {
-      localStorage.getItem.mockReturnValue(null);
-      
+      // localStorage is already empty from beforeEach
       uiStateFunctions.loadUIState();
       
-      expect(localStorage.getItem).toHaveBeenCalledWith('metaEditorUIState');
       // Should maintain default values
       expect(uiStateFunctions.uiState.toolbar).toBe(true);
       expect(uiStateFunctions.uiState.zenMode).toBe(true);
     });
 
     it('should handle invalid JSON in localStorage', () => {
-      localStorage.getItem.mockReturnValue('invalid json');
+      localStorage.setItem('metaEditorUIState', 'invalid json');
       const consoleSpy = jest.spyOn(console, 'error').mockImplementation();
       
       uiStateFunctions.loadUIState();
@@ -261,10 +258,9 @@ describe('UI State Management Functions', () => {
       
       uiStateFunctions.saveUIState();
       
-      expect(localStorage.setItem).toHaveBeenCalledWith(
-        'metaEditorUIState',
-        JSON.stringify({ toolbar: false, zenMode: false })
-      );
+      const savedData = JSON.parse(localStorage.getItem('metaEditorUIState'));
+      expect(savedData.toolbar).toBe(false);
+      expect(savedData.zenMode).toBe(false);
     });
   });
 
@@ -337,7 +333,8 @@ describe('UI State Management Functions', () => {
       uiStateFunctions.toggleUIElement('toolbar');
       
       expect(uiStateFunctions.uiState.toolbar).toBe(!initialToolbarState);
-      expect(localStorage.setItem).toHaveBeenCalled();
+      const savedData = JSON.parse(localStorage.getItem('metaEditorUIState'));
+      expect(savedData.toolbar).toBe(!initialToolbarState);
     });
 
     it('should not affect state for non-existent elements', () => {
@@ -356,7 +353,8 @@ describe('UI State Management Functions', () => {
       uiStateFunctions.toggleZenMode();
       
       expect(uiStateFunctions.uiState.zenMode).toBe(!initialZenMode);
-      expect(localStorage.setItem).toHaveBeenCalled();
+      const savedData = JSON.parse(localStorage.getItem('metaEditorUIState'));
+      expect(savedData.zenMode).toBe(!initialZenMode);
     });
   });
 
@@ -369,7 +367,9 @@ describe('UI State Management Functions', () => {
       
       expect(uiStateFunctions.uiState.zenMode).toBe(true);
       expect(uiStateFunctions.uiState.toolbar).toBe(false);
-      expect(localStorage.setItem).toHaveBeenCalled();
+      const savedData = JSON.parse(localStorage.getItem('metaEditorUIState'));
+      expect(savedData.zenMode).toBe(true);
+      expect(savedData.toolbar).toBe(false);
     });
   });
 
@@ -382,7 +382,9 @@ describe('UI State Management Functions', () => {
       
       expect(uiStateFunctions.uiState.zenMode).toBe(false);
       expect(uiStateFunctions.uiState.toolbar).toBe(true);
-      expect(localStorage.setItem).toHaveBeenCalled();
+      const savedData = JSON.parse(localStorage.getItem('metaEditorUIState'));
+      expect(savedData.zenMode).toBe(false);
+      expect(savedData.toolbar).toBe(true);
     });
   });
 });
