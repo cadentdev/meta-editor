@@ -10,7 +10,7 @@
   },
   "keywords": ["markdown", "editor", "frontmatter", "blog", "yaml"],
   "author": "CadentDev",
-  "license": "MIT",
+  "license": "GNU General Public License v3.0",
   "devDependencies": {
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
