@@ -13,6 +13,11 @@ yarn-error.log*
 coverage/
 *.lcov
 
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
+
 # macOS
 .DS_Store
 .DS_Store?

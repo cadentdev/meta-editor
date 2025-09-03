@@ -19,8 +19,8 @@ test.describe('Meta Editor Basic Functionality', () => {
   });
 
   test('should toggle to full mode when Show All is clicked', async ({ page }) => {
-    // Click on View menu
-    await page.locator('.menu-item:has-text("View")').click();
+    // Click on View menu specifically
+    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
     
     // Click "Show All Meta Data"
     await page.locator('#zen-toggle-menu').click();
@@ -33,7 +33,7 @@ test.describe('Meta Editor Basic Functionality', () => {
 
   test('should validate filename format', async ({ page }) => {
     // First show all fields
-    await page.locator('.menu-item:has-text("View")').click();
+    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
     
     // Enter invalid filename
@@ -57,7 +57,7 @@ test.describe('Meta Editor Basic Functionality', () => {
     await page.fill('#content', 'Test content for copying');
     
     // Click Edit menu
-    await page.locator('.menu-item:has-text("Edit")').click();
+    await page.locator('.menu-item').filter({ hasText: 'Edit' }).click();
     
     // Click Copy Markdown Preview
     await page.locator('text=Copy Markdown Preview').click();
@@ -68,14 +68,14 @@ test.describe('Meta Editor Basic Functionality', () => {
 
   test('should maintain UI state independently', async ({ page }) => {
     // Toggle toolbar off
-    await page.locator('.menu-item:has-text("View")').click();
+    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
     await page.locator('#toolbar-toggle-menu').click();
     
     // Toolbar should be hidden
     await expect(page.locator('#toolbar')).not.toBeVisible();
     
     // But we should still be able to toggle Zen Mode
-    await page.locator('.menu-item:has-text("View")').click();
+    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
     
     // Fields should now be visible
@@ -84,7 +84,7 @@ test.describe('Meta Editor Basic Functionality', () => {
 
   test('should handle tag input', async ({ page }) => {
     // Show all fields first
-    await page.locator('.menu-item:has-text("View")').click();
+    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
     
     // Add a tag

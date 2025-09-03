@@ -8,12 +8,30 @@ Meta Editor is a client-side web application that helps content creators add YAM
 
 ## Development Commands
 
-### Testing
+### Unit Testing (Jest)
 ```bash
 npm install              # Install Jest and testing dependencies
-npm test                # Run all tests once
+npm test                # Run all unit tests once
 npm run test:watch      # Run tests in watch mode for development
 npm run test:coverage   # Generate detailed test coverage report
+```
+
+### End-to-End Testing (Playwright)
+```bash
+npm run test:e2e        # Run E2E tests in all configured browsers
+npm run test:e2e:ui     # Run E2E tests with Playwright UI mode
+npm run test:e2e:headed # Run E2E tests in headed mode (visible browser)
+npm run test:e2e:debug  # Run E2E tests in debug mode
+```
+
+### Development Server
+```bash
+npm run serve           # Start local server on http://localhost:3000
+```
+
+### Playwright MCP Server
+```bash
+npm run mcp:start       # Start Playwright MCP server for AI-driven browser automation
 ```
 
 ### Running the Application
@@ -33,6 +51,9 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - `dist/styles.css` - Main application styling with rem-based responsive design
 - `dist/menu-styles.css` - Menu bar and toolbar specific styles
 - `tests/` - Comprehensive Jest test suite with 91+ unit tests
+- `e2e-tests/` - Playwright E2E tests for cross-browser functionality validation
+- `playwright.config.js` - Playwright configuration for E2E testing
+- `mcp-server.json` - MCP (Model Context Protocol) server configuration
 
 ### Application States
 - **Zen Mode** (default): Shows only Content editor and Preview for focused writing
@@ -75,8 +96,10 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 
 ### Testing Architecture
 - **Jest + jsdom** for unit testing with DOM simulation
+- **Playwright** for E2E testing across Chromium, Firefox, WebKit, and mobile browsers
 - **Comprehensive mocking** of browser APIs (FileReader, localStorage, clipboard)
 - **91+ unit tests** covering validation, UI state, data transformation, storage, and menu actions
+- **E2E test coverage** for complete user workflows and cross-browser compatibility
 - **Test isolation** with setup.js providing consistent mocks and cleanup
 
 ### UI Patterns
@@ -93,9 +116,12 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - **Font Awesome 6.4.0** - Icons for toolbar and UI elements
 
 ### Development
-- **Jest 29.7.0** - Testing framework
+- **Jest 29.7.0** - Unit testing framework
 - **jest-environment-jsdom** - DOM simulation for tests
 - **@testing-library/jest-dom** - Enhanced DOM testing matchers
+- **Playwright 1.55.0** - E2E testing and browser automation
+- **@playwright/test** - Playwright testing framework
+- **http-server** - Local development server
 
 ## Common Development Tasks
 
@@ -118,14 +144,35 @@ Libraries are loaded via CDN in the HTML. For new libraries:
 2. Add mock to `tests/setup.js` for testing
 3. Update any global references in code
 
+### Adding E2E Tests
+1. Create test files in `e2e-tests/` directory
+2. Use `page.locator()` with specific selectors for UI elements
+3. Use `page.locator('.menu-item').filter({ hasText: 'MenuName' })` for menu interactions
+4. Test across multiple browsers using configured projects
+5. Use `npm run test:e2e:ui` for interactive test development
+
+### Using Playwright MCP Server
+The MCP server enables AI-driven browser automation:
+1. Start server with `npm run mcp:start`
+2. Configure Claude Desktop/VS Code/Cursor with `mcp-server.json`
+3. Available capabilities include web navigation, form filling, and data extraction
+4. Server runs on localhost with configurable browser options
+
 ## Testing Guidelines
 
 ### Test File Organization
+
+#### Unit Tests (`tests/`)
 - `validation.test.js` - Input validation functions
 - `ui-state.test.js` - UI visibility and state management
 - `data-transformation.test.js` - Preview generation and data processing
 - `localStorage.test.js` - Persistence operations
 - `menu-actions.test.js` - User interaction workflows
+- `setup.js` - Jest configuration and mocks
+
+#### E2E Tests (`e2e-tests/`)
+- `basic-functionality.spec.js` - Core application workflows
+- Test configuration in `playwright.config.js` with multi-browser support
 
 ### Mock Strategy
 - All browser APIs are comprehensively mocked in `tests/setup.js`
