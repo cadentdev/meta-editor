@@ -1,6 +1,8 @@
 # Meta Editor
 
-A web-based editor that prepares a post for publication on the web by adding essential metadata. This tool helps content creators who prefer Markdown to format their posts with proper frontmatter and metadata for web publishing.
+A web-based editor that prepares a post for publication on the web by adding essential metadata as YAML frontmatter to Markdown documents. 
+
+This tool helps content creators who prefer Markdown to format their posts with proper frontmatter and metadata for web publishing.
 
 ## Design Philosophy
 
