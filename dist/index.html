@@ -156,6 +156,43 @@
         <input type="file" id="markdown-upload" accept=".md,.markdown,.txt" style="display: none;">
     </div>
     
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Settings</h3>
+                <span class="close" id="settings-close">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="ollama-endpoint">Ollama Endpoint URL</label>
+                    <input type="url" id="ollama-endpoint" placeholder="http://localhost:11434" value="http://localhost:11434">
+                    <span class="validation-message" id="endpoint-validation"></span>
+                    <div class="help-text">Enter the URL for your Ollama server (e.g., http://localhost:11434)</div>
+                </div>
+                
+                <div class="form-group">
+                    <button type="button" id="fetch-models-btn" class="btn btn-secondary">
+                        <i class="fas fa-sync"></i> Fetch Available Models
+                    </button>
+                    <span id="fetch-status" class="status-text"></span>
+                </div>
+                
+                <div class="form-group" id="model-selection-group" style="display: none;">
+                    <label for="preferred-model">Preferred Model</label>
+                    <select id="preferred-model">
+                        <option value="">Select a model...</option>
+                    </select>
+                    <div class="help-text">Choose your preferred model for AI generation tasks</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="settings-cancel" class="btn btn-secondary">Cancel</button>
+                <button type="button" id="settings-save" class="btn btn-primary">Save Settings</button>
+            </div>
+        </div>
+    </div>
+    
     <div class="status-bar">
         <div id="status-message">Version 0.2</div>
     </div>

@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 alert('MetaEditor v0.2\nA markdown editor with frontmatter support.');
                 break;
             case 'settings':
-                alert('Settings functionality will be implemented in a future version.');
+                openSettingsModal();
                 break;
             case 'new-post':
                 clearEditor();
@@ -940,6 +940,165 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Settings functionality
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsClose = document.getElementById('settings-close');
+    const settingsCancel = document.getElementById('settings-cancel');
+    const settingsSave = document.getElementById('settings-save');
+    const ollamaEndpointInput = document.getElementById('ollama-endpoint');
+    const fetchModelsBtn = document.getElementById('fetch-models-btn');
+    const fetchStatus = document.getElementById('fetch-status');
+    const modelSelectionGroup = document.getElementById('model-selection-group');
+    const preferredModelSelect = document.getElementById('preferred-model');
+    const endpointValidation = document.getElementById('endpoint-validation');
+
+    // Settings state
+    let aiSettings = {
+        ollamaEndpoint: 'http://localhost:11434',
+        preferredModel: ''
+    };
+
+    function loadAISettings() {
+        try {
+            const saved = localStorage.getItem('aiSettings');
+            if (saved) {
+                aiSettings = { ...aiSettings, ...JSON.parse(saved) };
+            }
+        } catch (error) {
+            console.error('Error loading AI settings:', error);
+        }
+    }
+
+    function saveAISettings() {
+        try {
+            localStorage.setItem('aiSettings', JSON.stringify(aiSettings));
+        } catch (error) {
+            console.error('Error saving AI settings:', error);
+        }
+    }
+
+    function openSettingsModal() {
+        loadAISettings();
+        ollamaEndpointInput.value = aiSettings.ollamaEndpoint;
+        preferredModelSelect.value = aiSettings.preferredModel;
+        
+        // Hide model selection initially
+        modelSelectionGroup.style.display = 'none';
+        fetchStatus.textContent = '';
+        endpointValidation.textContent = '';
+        
+        settingsModal.style.display = 'block';
+    }
+
+    function closeSettingsModal() {
+        settingsModal.style.display = 'none';
+    }
+
+    function validateEndpoint(url) {
+        try {
+            new URL(url);
+            return url.startsWith('http://') || url.startsWith('https://');
+        } catch {
+            return false;
+        }
+    }
+
+    async function fetchAvailableModels() {
+        const endpoint = ollamaEndpointInput.value.trim();
+        
+        if (!validateEndpoint(endpoint)) {
+            endpointValidation.textContent = 'Please enter a valid URL (e.g., http://localhost:11434)';
+            return;
+        }
+        
+        endpointValidation.textContent = '';
+        fetchModelsBtn.disabled = true;
+        fetchStatus.textContent = 'Fetching models...';
+        fetchStatus.className = 'status-text loading';
+        
+        try {
+            const response = await fetch(`${endpoint}/api/tags`);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            const models = data.models || [];
+            
+            // Clear existing options except first
+            preferredModelSelect.innerHTML = '<option value="">Select a model...</option>';
+            
+            if (models.length === 0) {
+                fetchStatus.textContent = 'No models found on this Ollama instance';
+                fetchStatus.className = 'status-text error';
+                return;
+            }
+            
+            // Add models to select
+            models.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.name;
+                option.textContent = `${model.name} (${model.size ? formatBytes(model.size) : 'Size unknown'})`;
+                preferredModelSelect.appendChild(option);
+            });
+            
+            modelSelectionGroup.style.display = 'block';
+            fetchStatus.textContent = `Found ${models.length} model(s)`;
+            fetchStatus.className = 'status-text success';
+            
+        } catch (error) {
+            fetchStatus.textContent = `Failed to connect: ${error.message}`;
+            fetchStatus.className = 'status-text error';
+            modelSelectionGroup.style.display = 'none';
+        } finally {
+            fetchModelsBtn.disabled = false;
+        }
+    }
+
+    function formatBytes(bytes) {
+        if (bytes === 0) return '0 B';
+        const k = 1024;
+        const sizes = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    }
+
+    function saveSettings() {
+        const endpoint = ollamaEndpointInput.value.trim();
+        
+        if (!validateEndpoint(endpoint)) {
+            endpointValidation.textContent = 'Please enter a valid URL';
+            return;
+        }
+        
+        aiSettings.ollamaEndpoint = endpoint;
+        aiSettings.preferredModel = preferredModelSelect.value;
+        
+        saveAISettings();
+        closeSettingsModal();
+        
+        statusMessage.textContent = 'Settings saved successfully';
+        setTimeout(() => {
+            statusMessage.textContent = 'Version 0.2';
+        }, 2000);
+    }
+
+    // Settings event listeners
+    settingsClose.addEventListener('click', closeSettingsModal);
+    settingsCancel.addEventListener('click', closeSettingsModal);
+    settingsSave.addEventListener('click', saveSettings);
+    fetchModelsBtn.addEventListener('click', fetchAvailableModels);
+    
+    // Close modal when clicking outside
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            closeSettingsModal();
+        }
+    });
+
+    // Initialize AI settings on load
+    loadAISettings();
+
     function toggleUIElement(elementName) {
         if (uiState.hasOwnProperty(elementName)) {
             uiState[elementName] = !uiState[elementName];
