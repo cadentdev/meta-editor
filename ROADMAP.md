@@ -4,20 +4,30 @@
 
 Meta Editor is a web-based Markdown editor focused on preparing blog posts with well-formatted and useful YAML frontmatter and metadata. The application emphasizes privacy (client-side only), accessibility, and a distraction-free writing experience.
 
+## Recently Completed Features
+
+### AI Settings Infrastructure ✅
+
+- [x] **Settings Modal Dialog**: Professional modal interface for AI configuration
+- [x] **Ollama Endpoint Configuration**: URL input with real-time validation
+- [x] **Model Discovery**: Automatic fetching of available models from Ollama API
+- [x] **Model Selection**: Dropdown with model names and file sizes
+- [x] **Settings Persistence**: Save/load AI configuration to localStorage
+- [x] **Error Handling**: Comprehensive validation and user feedback
+- [x] **Unit Test Coverage**: Complete test suite with 14 additional tests
+
 ## Upcoming Development Priorities
 
-### Basic AI Generation
+### Basic AI Generation (In Progress)
 
-- [ ] Save, load and edit basic AI settings (Ollama endpoint, preferred model)
-- [ ] Use Ollama API
+- [ ] Use Ollama API with configured settings
 - [ ] Generate meta data from Generate menu
 - [ ] Create AI Generation Dialog box
 - [ ] Generate Summary
-- [ ] Generate Multiple Title
-- [ ] Generate File Name
+- [ ] Generate Multiple Title Options
+- [ ] Generate File Name Suggestions
 - [ ] Generate Tags
-- [ ] Generate Alt Text
-- [ ] Generate Tags
+- [ ] Generate Alt Text for Images
 
 ### BYOK AI Generation
 

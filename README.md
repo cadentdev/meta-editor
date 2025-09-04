@@ -101,6 +101,7 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - **Persistent Templates**: Header and footer templates persist across sessions
 - **Status Bar**: Shows contextual information, user feedback, and Zen Mode status
 - **Improved Layout**: Content field positioned at bottom with H2 heading for better workflow
+- **AI Integration Settings**: Configure Ollama endpoint and select preferred models for AI generation features
 
 ## Usage
 
@@ -140,12 +141,21 @@ The Meta Editor launches in Zen Mode for distraction-free writing:
 4. Image filename and alt text are automatically populated in their respective fields
 5. If your file contains content matching saved header/footer templates, they'll be extracted
 
+### AI Settings Configuration
+
+1. Open **MetaEditor > Settings...** from the menu bar
+2. Configure your **Ollama Endpoint URL** (default: http://localhost:11434)
+3. Click **"Fetch Available Models"** to discover available AI models
+4. Select your **Preferred Model** from the dropdown
+5. Click **"Save Settings"** to persist your AI configuration
+
 ### Interface Controls
 
 1. **Zen Mode**: Toggle between focused writing (Content + Preview only) and full interface
 2. **Toolbar**: Independently show/hide the icon toolbar for menu actions
 3. **Menu System**: Access all features through Mac-style menu bar with proper dropdown behavior
 4. **Status Feedback**: Get confirmation messages for copy/download actions in status bar
+5. **Settings Management**: Configure AI integration through the Settings modal dialog
 
 ### Exporting Your Work
 

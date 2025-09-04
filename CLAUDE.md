@@ -46,11 +46,12 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - **Modular design**: Separate concerns for UI state, validation, data transformation, and storage
 
 ### Key Files
-- `dist/index.html` - Main application entry point with complete UI structure
-- `dist/script.js` - All application logic (~900 lines of vanilla JavaScript)
-- `dist/styles.css` - Main application styling with rem-based responsive design
+- `dist/index.html` - Main application entry point with complete UI structure including Settings modal
+- `dist/script.js` - All application logic (~1100 lines of vanilla JavaScript) with AI settings functionality
+- `dist/styles.css` - Main application styling with rem-based responsive design and modal components
 - `dist/menu-styles.css` - Menu bar and toolbar specific styles
-- `tests/` - Comprehensive Jest test suite with 91+ unit tests
+- `tests/` - Comprehensive Jest test suite with 132+ unit tests including Settings functionality
+- `tests/settings.test.js` - Complete test coverage for AI settings, validation, and modal interactions
 - `e2e-tests/` - Playwright E2E tests for cross-browser functionality validation
 - `playwright.config.js` - Playwright configuration for E2E testing
 - `mcp-server.json` - MCP (Model Context Protocol) server configuration
@@ -84,7 +85,16 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - Persistent data storage for work-in-progress documents
 - Template storage for reusable headers and footers
 - UI preference persistence (toolbar state)
+- AI settings persistence (Ollama endpoint and preferred model)
 - Comprehensive error handling and fallbacks
+
+### AI Integration Features
+- **Settings Modal**: Professional modal dialog for AI configuration
+- **Ollama Integration**: Connect to local or remote Ollama instances
+- **Model Discovery**: Automatic fetching and listing of available AI models
+- **Model Metadata**: Display model names with file sizes for informed selection
+- **Endpoint Validation**: Real-time URL validation with user feedback
+- **Settings Persistence**: AI configuration saved to localStorage with error handling
 
 ## Development Patterns
 
@@ -168,6 +178,7 @@ The MCP server enables AI-driven browser automation:
 - `data-transformation.test.js` - Preview generation and data processing
 - `localStorage.test.js` - Persistence operations
 - `menu-actions.test.js` - User interaction workflows
+- `settings.test.js` - AI settings functionality, modal interactions, and endpoint validation
 - `setup.js` - Jest configuration and mocks
 
 #### E2E Tests (`e2e-tests/`)
