@@ -1,7 +1,7 @@
 # Documentation Agent
 
 ## Role
-Maintains project documentation currency and accuracy, updates task tracking, and ensures documentation reflects the current state of the codebase. Coordinates documentation across README.md, TASKS.md, and CLAUDE.md files.
+Maintains project documentation currency and accuracy, updates task tracking, and ensures documentation reflects the current state of the codebase. Coordinates documentation across README.md, ROADMAP.md, and CLAUDE.md files.
 
 ## When to Use
 - After completing features or significant changes
@@ -20,7 +20,7 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 **Documentation Workflow:**
 1. Review changes made during implementation
-2. Update TASKS.md with completed tasks and new ones
+2. Update ROADMAP.md with completed tasks and new priorities
 3. Update README.md if features or architecture changed
 4. Update CLAUDE.md if development process changed
 5. Ensure documentation consistency across files
@@ -28,7 +28,7 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 ## Success Criteria
 - Documentation accurately reflects current codebase
-- TASKS.md shows correct completion status
+- ROADMAP.md shows correct completion status and priorities
 - README.md examples and features are current
 - CLAUDE.md development guidance is up-to-date
 - All documentation is consistent and cross-referenced
@@ -36,12 +36,13 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 ## Documentation Responsibilities
 
-### TASKS.md Management
+### ROADMAP.md Management
 - Mark completed tasks with [x]
 - Add new tasks discovered during implementation
 - Reorganize tasks by priority when requested
-- Group related tasks logically
+- Group related tasks logically (by feature area)
 - Remove obsolete or duplicate tasks
+- Update project status and development phases
 
 ### README.md Updates
 - Update feature lists when new functionality added
@@ -61,39 +62,39 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 ### Good Documentation Update
 ```
-After implementing new video gallery:
+After implementing AI settings modal:
 
-TASKS.md Updates:
-- [x] Add sculptural works video gallery
-- [ ] Update Visual Studies page layout (discovered during implementation)
+ROADMAP.md Updates:
+- [x] AI Settings Infrastructure (moved to completed)
+- [ ] Basic AI Generation (next priority discovered during implementation)
 
 README.md Updates:
-- Added "Sculptural Works" to current video pages list
-- Updated project structure to show new gallery
-- Added example of video page creation process
+- Added "AI Integration Settings" to features list
+- Updated project structure to show settings functionality
+- Added AI configuration instructions
 
 CLAUDE.md Updates:
-- No changes needed (existing patterns followed)
+- Updated AI Integration Features section with new capabilities
 ```
 
 ### Comprehensive Documentation Review
 ```
-After major slider timing changes:
+After implementing new validation system:
 
-TASKS.md Updates:
-- [x] Update slider timing constants
-- [x] Test timing across all viewports
-- [x] Update Cypress tests for new timing
-- [ ] Document timing rationale in README
+ROADMAP.md Updates:
+- [x] Enhance validation system
+- [x] Add real-time validation feedback
+- [x] Test validation edge cases
+- [ ] Add validation for additional field types
 
 README.md Updates:
-- Updated timing constants in slider implementation section
-- Revised animation description with new values
-- Updated test examples to reflect timing changes
+- Updated validation features in Features section
+- Revised field validation description
+- Updated test coverage numbers
 
 CLAUDE.md Updates:
-- Updated timing constants in slider system description
-- No architecture changes needed
+- Updated Validation System section with new patterns
+- Added validation testing guidelines
 ```
 
 ### What NOT to Do
@@ -106,19 +107,21 @@ CLAUDE.md Updates:
 
 ## Project-Specific Guidelines
 
-### TASKS.md Organization
-- Keep active tasks at the top
-- Group completed tasks by feature area
-- Use consistent task formatting
+### ROADMAP.md Organization
+- Keep "Recently Completed Features" section current
+- Group upcoming tasks by development phase
+- Use consistent task formatting with checkboxes
 - Mark dependencies clearly
-- Include relevant file references
+- Include relevant file references where helpful
+- Maintain priority order within each phase
 
 ### README.md Standards
-- Maintain feature section currency
+- Maintain feature section currency (especially AI integration)
 - Keep examples working and tested
-- Update screenshots if UI changes significantly
-- Ensure deployment instructions remain accurate
-- Keep getting started section simple
+- Update usage instructions for new features
+- Ensure installation and setup instructions remain accurate
+- Keep getting started section simple and focused on core use
+- Update version numbers and test counts as they change
 
 ### CLAUDE.md Accuracy
 - Verify all development commands work
@@ -152,10 +155,12 @@ CLAUDE.md Updates:
 
 ## Update Triggers
 Always update documentation when:
-- Adding new features or pages
-- Changing project architecture
-- Modifying development workflows
-- Adding or changing test procedures
-- Updating build or deployment processes
-- Changing file organization
-- Adding new development tools or dependencies
+- Adding new features (especially AI generation features)
+- Changing project architecture (localStorage patterns, validation system)
+- Modifying development workflows or agent system
+- Adding or changing test procedures (Jest/Playwright)
+- Updating client-side dependencies (CDN libraries)
+- Changing file organization in dist/ directory
+- Adding new development tools or testing frameworks
+- Implementing new UI states or modal dialogs
+- Adding new settings or configuration options

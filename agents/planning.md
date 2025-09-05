@@ -5,7 +5,8 @@ Analyzes complex feature requirements and creates comprehensive implementation p
 
 ## When to Use
 - Complex features requiring multiple file changes or new architecture
-- Implementing new responsive design patterns
+- Implementing AI generation features and settings
+- Adding new metadata fields or validation systems
 - When unsure about implementation approach
 - Before starting any work that affects multiple components
 
@@ -20,11 +21,12 @@ Analyzes complex feature requirements and creates comprehensive implementation p
 **Methodology:**
 
 1. Research existing patterns in the codebase
-2. Analyze data flow through scripts.js
-3. Identify styling requirements
-4. Consider testing implications
-5. Break down into sequential, logical steps
-6. Estimate complexity and potential issues
+2. Analyze data flow through dist/script.js
+3. Identify styling requirements (dist/styles.css, dist/menu-styles.css)
+4. Consider localStorage integration and validation patterns
+5. Consider testing implications (Jest unit tests, Playwright E2E)
+6. Break down into sequential, logical steps
+7. Estimate complexity and potential issues
 
 **Output Format:**
 
@@ -44,11 +46,31 @@ Analyzes complex feature requirements and creates comprehensive implementation p
 
 ### What NOT to Do
 
-- Vague steps like "update the video system"
-- Missing file locations or specific changes
-- Ignoring existing patterns and conventions
-- No consideration of testing requirements
+- Vague steps like "update the AI system" without specifying which components
+- Missing file locations or specific changes in dist/ directory
+- Ignoring existing validation patterns and localStorage conventions
+- No consideration of testing requirements (both Jest and Playwright)
+- Planning features that require server-side processing (Meta Editor is client-side only)
+- Adding new external dependencies without considering CDN loading
 
 ## Project-Specific Context
 
-- Avoid calls to the hosting web server using HTTP requests. All requests should use standard API calls.
+### Meta Editor Architecture
+- **Client-side only**: All processing happens in browser using vanilla JavaScript
+- **No build process**: Application runs directly from HTML/CSS/JS files in dist/
+- **Single JavaScript file**: All logic contained in dist/script.js (~1100 lines)
+- **Local storage persistence**: User data and preferences saved in browser
+- **CDN dependencies**: marked.js, js-yaml, Font Awesome loaded via CDN
+
+### Key Systems to Consider
+- **AI Integration**: Ollama endpoint configuration, model discovery, settings persistence
+- **YAML Frontmatter**: Generation and parsing using js-yaml library
+- **Validation System**: Real-time validation for filename, title, date, summary fields
+- **UI State Management**: Zen Mode, toolbar visibility, persistent preferences
+- **Template System**: Header/footer template storage and management
+- **File Operations**: Upload, download, clipboard operations using browser APIs
+
+### Testing Strategy
+- **Jest unit tests**: 132+ tests covering validation, UI state, data transformation
+- **Playwright E2E tests**: Cross-browser functionality validation
+- **Mock strategy**: All browser APIs mocked in tests/setup.js
