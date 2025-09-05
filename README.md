@@ -102,6 +102,7 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - **Status Bar**: Shows contextual information, user feedback, and Zen Mode status
 - **Improved Layout**: Content field positioned at bottom with H2 heading for better workflow
 - **AI Integration Settings**: Configure Ollama endpoint and select preferred models for AI generation features
+- **AI Status Indicator**: Visual toolbar indicator showing AI connection status (inactive, active, error, checking)
 
 ## Usage
 
@@ -156,6 +157,12 @@ The Meta Editor launches in Zen Mode for distraction-free writing:
 3. **Menu System**: Access all features through Mac-style menu bar with proper dropdown behavior
 4. **Status Feedback**: Get confirmation messages for copy/download actions in status bar
 5. **Settings Management**: Configure AI integration through the Settings modal dialog
+6. **AI Status Indicator**: Monitor AI connection status via the robot icon in the toolbar
+   - **Gray**: No AI configuration set up
+   - **Green**: AI connected and ready
+   - **Red**: AI connection failed or model unavailable
+   - **Orange (pulsing)**: Checking AI connection status
+   - **Click to configure**: Opens AI Settings modal for easy setup
 
 ### Exporting Your Work
 

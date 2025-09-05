@@ -55,40 +55,74 @@ Executes comprehensive testing workflows, validates functionality across differe
 
 ## Testing Workflows
 
-### New Feature Testing
+### Early Feature Development Testing (Chromium Desktop Only)
+
+**For initial feature development and quick validation:**
 
 1. Run `npm test` to ensure all unit tests pass
-2. Run `npm run test:e2e` to ensure no E2E regressions
-3. Use Playwright to manually test new functionality
-4. Test localStorage integration and persistence
-5. Test AI integration features if applicable
-6. Test across viewports: phone (375x667), tablet (768x1024), desktop (1440x900)
-7. Verify validation system behavior and error handling
+2. Use Playwright with **Chromium only** to test new functionality
+3. Focus on **desktop viewport (1440x900)** for initial validation
+4. Test core functionality and basic user workflows
+5. Verify localStorage integration and persistence
+6. Test AI integration features if applicable
+7. Validate error handling and edge cases
+
+**Playwright Testing Commands for Early Development:**
+- `npm run test:e2e:headed` - Visual testing in Chromium desktop
+- `npm run test:e2e:debug` - Debug mode for detailed testing
+- `npm run test:e2e:ui` - Interactive UI mode for manual testing
+
+### Full Cross-Browser Testing (Later in Development)
+
+**After features are working in Chromium desktop:**
+
+1. Run full E2E test suite: `npm run test:e2e` 
+2. Test across all browsers: Chromium, Firefox, WebKit
+3. Test responsive design across viewports:
+   - Phone: 375x667
+   - Tablet: 768x1024  
+   - Desktop: 1440x900
+4. Validate mobile touch interactions
+5. Test cross-browser compatibility issues
 
 ### Visual Changes Testing
 
 1. Run unit tests to ensure no functional regressions: `npm test`
-2. Use Playwright to verify responsive design changes
+2. Use Playwright with **Chromium desktop** for initial verification
 3. Test menu dropdown behavior and styling
 4. Verify modal dialogs (settings, about) display correctly
 5. Test toolbar icon visibility and interactions
 6. Validate Zen Mode vs Full Mode visual states
+7. **Later:** Expand to multi-browser and responsive testing
 
 ### Bug Fix Testing
 
-1. Use Playwright to reproduce the issue
+1. Use Playwright with **Chromium desktop** to reproduce the issue
 2. Verify the fix resolves the problem
 3. Run relevant test subset to ensure no regressions
 4. Document the fix in test results
+5. **If needed:** Test across other browsers for compatibility
+
+### Progressive Testing Philosophy
+
+**Early Development (Feature Validation):**
+- ✅ Chromium desktop only
+- ✅ Core functionality focus
+- ✅ Quick iteration and feedback
+
+**Pre-Production (Comprehensive Validation):**
+- ✅ All browsers (Chromium, Firefox, WebKit)
+- ✅ All viewports (mobile, tablet, desktop)
+- ✅ Edge cases and accessibility
+- ✅ Performance validation
 
 ### What NOT to Do
-- Skip testing after "small" changes (validation can break easily)
-- Only test on desktop viewport (responsive design is critical)
-- Ignore test failures as "probably fine"
-- Not testing localStorage operations thoroughly
-- Missing AI integration testing (Ollama connection, model selection)
-- Not testing file upload/download edge cases
-- Forgetting to test validation system with invalid inputs
+- Skip unit testing (`npm test`) before E2E testing
+- Test multiple browsers before feature works in Chromium
+- Focus on mobile viewport during early development
+- Ignore Chromium desktop failures while testing other browsers
+- Skip localStorage and AI integration testing
+- Not documenting browser-specific issues for later resolution
 
 ## Error Handling
 - Document failing tests with specific error messages

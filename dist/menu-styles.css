@@ -122,6 +122,33 @@ body {
     margin: 0 0.625rem;
 }
 
+/* AI Status Indicator */
+.ai-status-indicator {
+    position: relative;
+}
+
+.ai-status-indicator.status-inactive .fa-robot {
+    color: #95a5a6; /* Gray - inactive/disabled */
+}
+
+.ai-status-indicator.status-active .fa-robot {
+    color: #27ae60; /* Green - connected/working */
+}
+
+.ai-status-indicator.status-error .fa-robot {
+    color: #e74c3c; /* Red - error/broken */
+}
+
+.ai-status-indicator.status-checking .fa-robot {
+    color: #f39c12; /* Orange - checking/loading */
+    animation: ai-status-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ai-status-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
 /* Hide class for toggling visibility */
 .hidden {
     display: none !important;

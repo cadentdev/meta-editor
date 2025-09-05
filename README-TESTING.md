@@ -20,11 +20,21 @@ The Meta Editor uses a three-tiered testing approach:
 - Verify menu actions trigger correct functions
 - Test UI state management functions
 
-### E2E Tests (Playwright/Puppeteer) - Future
+### E2E Tests (Playwright) - Current
 
-- Test complete user workflows
-- Verify persistence across page reloads
-- Test file uploads/downloads
+**Progressive Testing Philosophy:**
+
+**Early Development (Chromium Desktop):**
+- Test new features quickly with `npm run test:e2e:headed`
+- Focus on 1440x900 desktop viewport only
+- Core functionality validation before cross-browser testing
+- Quick iteration and feedback cycle
+
+**Pre-Production (Full Cross-Browser):**
+- Test across all browsers with `npm run test:e2e`
+- Multiple viewports: phone (375x667), tablet (768x1024), desktop (1440x900)
+- Complete user workflows and edge cases
+- Cross-browser compatibility validation
 
 ## Test Structure
 

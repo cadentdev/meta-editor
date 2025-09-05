@@ -46,17 +46,19 @@ Reference agents by their "dossier" file when requesting specific expertise:
 
 1. `agents/planning.md` → Research and create implementation plan
 2. `agents/implementation.md` → Execute approved plan  
-3. `agents/testing.md` → Validate functionality and run test suites
+3. `agents/testing.md` → Validate functionality using Chromium desktop only
 4. `agents/review.md` → Assess code quality and adherence to conventions
 5. `agents/documentation.md` → Update project documentation
+6. **Later (pre-production):** Full cross-browser and responsive testing
 
 **Styling/Visual Changes Workflow:**
 
 1. `agents/planning.md` → Research and create implementation plan
 2. `agents/implementation.md` → Execute approved plan  
-3. `agents/testing.md` → Validate functionality and run test suites
+3. `agents/testing.md` → Validate functionality using Chromium desktop only
 4. Update code as necessary based on testing feedback
 5. Restart local server and open browser for user review
+6. **Later (pre-production):** Test across all browsers and viewports
 
 **Bug Fix Workflow:**
 
@@ -78,11 +80,17 @@ npm run test:coverage   # Generate detailed test coverage report
 ```
 
 ### End-to-End Testing (Playwright)
+
+**For Early Feature Development (Chromium Desktop Only):**
 ```bash
-npm run test:e2e        # Run E2E tests in all configured browsers
-npm run test:e2e:ui     # Run E2E tests with Playwright UI mode
-npm run test:e2e:headed # Run E2E tests in headed mode (visible browser)
-npm run test:e2e:debug  # Run E2E tests in debug mode
+npm run test:e2e:headed # Run E2E tests in headed mode - Chromium desktop
+npm run test:e2e:ui     # Run E2E tests with Playwright UI mode - interactive testing
+npm run test:e2e:debug  # Run E2E tests in debug mode - detailed debugging
+```
+
+**For Full Cross-Browser Testing (Later in Development):**
+```bash
+npm run test:e2e        # Run E2E tests in all configured browsers (Chromium, Firefox, WebKit)
 ```
 
 ### Development Server

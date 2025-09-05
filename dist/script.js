@@ -6,6 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const toolbarButtons = document.querySelectorAll('.toolbar-button');
     const toolbar = document.getElementById('toolbar');
     
+    // AI Status Elements
+    const aiStatusBtn = document.getElementById('ai-status-btn');
+    const aiStatusIcon = document.getElementById('ai-status-icon');
+    
     // UI Element visibility state
     const uiState = {
         toolbar: true,
@@ -1081,6 +1085,88 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             statusMessage.textContent = 'Version 0.2';
         }, 2000);
+        
+        // Trigger AI status check after saving settings
+        scheduleStatusCheck(500);
+    }
+
+    // AI Status Management
+    let aiConnectionStatus = 'inactive'; // inactive, active, error, checking
+
+    async function checkAIStatus() {
+        // Check if both endpoint and model are configured
+        if (!aiSettings.ollamaEndpoint || !aiSettings.preferredModel) {
+            updateAIStatusIndicator('inactive', 'AI Status: Not Configured');
+            return;
+        }
+
+        // Show checking state with animation
+        updateAIStatusIndicator('checking', 'AI Status: Checking...');
+        
+        try {
+            // Test endpoint connectivity with timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000);
+            
+            const response = await fetch(`${aiSettings.ollamaEndpoint}/api/tags`, {
+                method: 'GET',
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
+            if (!response.ok) {
+                throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            const models = data.models || [];
+            
+            // Check if preferred model is available
+            const modelAvailable = models.some(model => model.name === aiSettings.preferredModel);
+            
+            if (modelAvailable) {
+                updateAIStatusIndicator('active', `AI Status: Connected (${aiSettings.preferredModel})`);
+            } else {
+                updateAIStatusIndicator('error', `AI Status: Model "${aiSettings.preferredModel}" not found`);
+            }
+            
+        } catch (error) {
+            console.error('AI status check failed:', error);
+            
+            // Provide more specific error messages
+            let errorMessage = 'AI Status: Connection Failed';
+            if (error.name === 'AbortError') {
+                errorMessage = 'AI Status: Connection Timeout';
+            } else if (error.message.includes('Failed to fetch')) {
+                errorMessage = 'AI Status: Cannot Reach Server';
+            }
+            
+            updateAIStatusIndicator('error', errorMessage);
+        }
+    }
+
+    function updateAIStatusIndicator(status, tooltip) {
+        aiConnectionStatus = status;
+        
+        aiStatusBtn.classList.remove('status-inactive', 'status-active', 'status-error', 'status-checking');
+        aiStatusBtn.classList.add(`status-${status}`);
+        aiStatusBtn.title = tooltip;
+        aiStatusBtn.setAttribute('data-status-message', tooltip);
+    }
+
+    function initializeAIStatus() {
+        loadAISettings();
+        // Set initial state immediately to avoid visual delay
+        updateAIStatusIndicator('inactive', 'AI Status: Not Configured');
+        // Then check actual status after delay
+        setTimeout(() => checkAIStatus(), 2000);
+    }
+
+    let statusCheckTimeout;
+    function scheduleStatusCheck(delay = 1000) {
+        clearTimeout(statusCheckTimeout);
+        statusCheckTimeout = setTimeout(checkAIStatus, delay);
     }
 
     // Settings event listeners
@@ -1089,6 +1175,20 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsSave.addEventListener('click', saveSettings);
     fetchModelsBtn.addEventListener('click', fetchAvailableModels);
     
+    // AI Status event listeners
+    aiStatusBtn.addEventListener('mouseenter', () => {
+        const statusMessage = aiStatusBtn.getAttribute('data-status-message') || aiStatusBtn.title;
+        document.getElementById('status-message').textContent = statusMessage;
+    });
+
+    aiStatusBtn.addEventListener('mouseleave', () => {
+        document.getElementById('status-message').textContent = 'Version 0.2';
+    });
+
+    aiStatusBtn.addEventListener('click', () => {
+        handleMenuAction('settings');
+    });
+    
     // Close modal when clicking outside
     settingsModal.addEventListener('click', (e) => {
         if (e.target === settingsModal) {
@@ -1096,8 +1196,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialize AI settings on load
-    loadAISettings();
+    // Initialize AI settings and status on load
+    initializeAIStatus();
 
     function toggleUIElement(elementName) {
         if (uiState.hasOwnProperty(elementName)) {

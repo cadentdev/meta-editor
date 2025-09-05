@@ -18,6 +18,9 @@ test-results/
 playwright-report/
 playwright/.cache/
 
+# Screenshots generated during testing
+screenshots/
+
 # macOS
 .DS_Store
 .DS_Store?

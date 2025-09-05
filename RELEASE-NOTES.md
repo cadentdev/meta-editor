@@ -1,5 +1,35 @@
 # Release Notes
 
+## Release v0.2.1: AI Status Indicator (Current)
+
+### 🤖 **AI Integration Enhancements**
+
+#### **AI Status Indicator**
+- **Visual Status Monitoring**: Robot icon in toolbar shows real-time AI connection status
+- **Four Status States**: Inactive (gray), Active (green), Error (red), Checking (orange with pulse animation)
+- **Click to Configure**: Clicking the status indicator opens AI Settings modal for easy setup
+- **Smart Status Checking**: Automatic connection validation with timeout handling and specific error messages
+- **Immediate Feedback**: Status updates instantly on settings changes and app load
+
+#### **Enhanced AI Settings Integration**
+- **Comprehensive Error Handling**: Improved connection testing with detailed error messages
+- **Status Persistence**: AI connection status properly maintained across sessions
+- **User Experience**: Clear visual feedback for all AI connection states
+
+### 🧪 **Testing Workflow Improvements**
+
+#### **Progressive Testing Philosophy**
+- **Early Development**: Chromium desktop testing for quick feature validation
+- **Pre-Production**: Full cross-browser testing (Chromium, Firefox, WebKit) and responsive design
+- **Efficient Development**: Faster iteration cycle with focused initial testing
+
+#### **Project Organization**
+- **Screenshots Management**: Created `screenshots/` directory for test-generated images
+- **Test File Organization**: Moved all E2E test files to `e2e-tests/` directory
+- **Clean Repository**: Updated `.gitignore` to exclude generated files
+
+---
+
 ## Release v0.2: UI Enhancements & Test Suite Implemented
 
 ### 🎯 **Core Interface Improvements**

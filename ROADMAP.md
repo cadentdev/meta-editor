@@ -26,7 +26,8 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 ### Basic AI Generation (In Progress)
 
-- [ ] Use Ollama API with configured settings
+- [x] Use Ollama API with configured settings
+    - [x] Implement AI Status indicator on toolbar
 - [ ] Generate Multiple Title Options
     - [ ] Create AI Generation Dialog box
 - [ ] Generate meta data from Generate menu
