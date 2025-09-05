@@ -6,6 +6,67 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Meta Editor is a client-side web application that helps content creators add YAML frontmatter metadata to Markdown documents. The application runs entirely in the browser with no server dependencies and emphasizes privacy, accessibility, and a distraction-free writing experience.
 
+## Development Guidelines
+
+- Upon starting a new chat session, review the README.md and ROADMAP.md files to understand the project context.
+- Update the ROADMAP.md file with the current state of the project, including completed tasks and any new tasks that have been added.
+- Before starting your implementation of significant features (new functionality, refactoring, architecture changes, new libraries), describe your plan and ask for approval before proceeding. For minor changes (typos, styling tweaks, error fixes), proceed without confirmation.
+- If you aren't sure how to implement a feature, ask for help.
+- If you need more information to craft an effective implementation plan, ask for it.
+- Use the Playwright tool to validate code changes when you reach a logical review point and think the feature is working.
+- When testing is completed, reload the site in desktop mode so the user can also test the implementation before calling the review agent.
+- After implementing features, run the appropriate test commands (npm test, npm run test:e2e) to verify functionality.
+- For visual changes, consider running visual regression tests (npm run test:visual) to ensure design consistency.
+- If implementation doesn't match expected behavior, revert changes and reassess the approach.
+- Once a new feature or change has been implemented, update the ROADMAP.md and README.md files to reflect the current state of the project, and prompt me to commit the changes.
+
+## Agent System
+
+This project uses specialized agents for different development phases. Each agent has specific capabilities and constraints defined in their dossier files.
+
+### Available Agents
+
+- `agents/planning.md` - Feature analysis and implementation planning
+- `agents/implementation.md` - Code changes and feature development  
+- `agents/testing.md` - Test execution and validation
+- `agents/review.md` - Code quality assessment
+- `agents/documentation.md` - Documentation updates and maintenance
+
+### Usage
+
+Reference agents by their "dossier" file when requesting specific expertise:
+
+- "Use `agents/planning.md` to break down the video gallery feature"
+- "Have `agents/testing.md` run the full test suite and validate with Playwright"
+- "Call `agents/review.md` to assess the slider changes before testing"
+
+### Agent Workflow
+
+**Typical Feature Development:**
+
+1. `agents/planning.md` → Research and create implementation plan
+2. `agents/implementation.md` → Execute approved plan  
+3. `agents/testing.md` → Validate functionality and run test suites
+4. `agents/review.md` → Assess code quality and adherence to conventions
+5. `agents/documentation.md` → Update project documentation
+
+**Styling/Visual Changes Workflow:**
+
+1. `agents/planning.md` → Research and create implementation plan
+2. `agents/implementation.md` → Execute approved plan  
+3. `agents/testing.md` → Validate functionality and run test suites
+4. Update code as necessary based on testing feedback
+5. Restart local server and open browser for user review
+
+**Bug Fix Workflow:**
+
+1. `agents/implementation.md` → Apply fixes
+2. `agents/testing.md` → Verify resolution
+
+**Documentation Updates:**
+
+1. `agents/documentation.md` → Maintain current documentation state
+
 ## Development Commands
 
 ### Unit Testing (Jest)

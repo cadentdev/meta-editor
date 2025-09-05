@@ -18,6 +18,12 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 ## Upcoming Development Priorities
 
+## Implement Agent System
+
+- [ ] Reveiew agent system in CLAUDE.md and agents/ files to ensure compatibility with this project and update as necessary
+- [ ] Update agent descriptions with examples
+- [ ] Update agent descriptions with project specific instructions
+
 ### Basic AI Generation (In Progress)
 
 - [ ] Use Ollama API with configured settings
