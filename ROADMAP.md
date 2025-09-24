@@ -28,6 +28,8 @@ Meta Editor is a web-based Markdown editor focused on preparing blog posts with 
 
 - [x] Use Ollama API with configured settings
     - [x] Implement AI Status indicator on toolbar
+    - [x] Log AI requests and responses to console
+    - [x] Resolve error: Access to fetch at 'http://192.168.52.225:11434/api/tags' from origin 'null' has been blocked by CORS policy: No 'Access-Control-Allow-Origin' header is present on the requested resource.
 - [ ] Generate Multiple Title Options
     - [ ] Create AI Generation Dialog box
 - [ ] Generate meta data from Generate menu

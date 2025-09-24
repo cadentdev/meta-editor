@@ -1009,35 +1009,43 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function fetchAvailableModels() {
         const endpoint = ollamaEndpointInput.value.trim();
-        
+
         if (!validateEndpoint(endpoint)) {
             endpointValidation.textContent = 'Please enter a valid URL (e.g., http://localhost:11434)';
             return;
         }
-        
+
         endpointValidation.textContent = '';
         fetchModelsBtn.disabled = true;
         fetchStatus.textContent = 'Fetching models...';
         fetchStatus.className = 'status-text loading';
-        
+
         try {
-            const response = await fetch(`${endpoint}/api/tags`);
+            const response = await fetch(`${endpoint}/api/tags`, {
+                method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'omit'
+            });
+
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
-            
+
             const data = await response.json();
             const models = data.models || [];
-            
+
             // Clear existing options except first
             preferredModelSelect.innerHTML = '<option value="">Select a model...</option>';
-            
+
             if (models.length === 0) {
                 fetchStatus.textContent = 'No models found on this Ollama instance';
                 fetchStatus.className = 'status-text error';
                 return;
             }
-            
+
             // Add models to select
             models.forEach(model => {
                 const option = document.createElement('option');
@@ -1045,13 +1053,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 option.textContent = `${model.name} (${model.size ? formatBytes(model.size) : 'Size unknown'})`;
                 preferredModelSelect.appendChild(option);
             });
-            
+
             modelSelectionGroup.style.display = 'block';
             fetchStatus.textContent = `Found ${models.length} model(s)`;
             fetchStatus.className = 'status-text success';
-            
+
         } catch (error) {
-            fetchStatus.textContent = `Failed to connect: ${error.message}`;
+            // Handle CORS and connection errors with more helpful messages
+            let errorMessage = error.message;
+            if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = 'Unable to connect. This may be due to CORS policy. Try running the app from a local server (npm run serve) or configure Ollama with CORS headers.';
+            } else if (error.message.includes('CORS')) {
+                errorMessage = 'CORS error. Run the app from a local server (npm run serve) or configure Ollama to allow CORS.';
+            }
+
+            fetchStatus.textContent = `Failed to connect: ${errorMessage}`;
             fetchStatus.className = 'status-text error';
             modelSelectionGroup.style.display = 'none';
         } finally {
@@ -1110,6 +1126,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const response = await fetch(`${aiSettings.ollamaEndpoint}/api/tags`, {
                 method: 'GET',
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'omit',
                 signal: controller.signal
             });
             
@@ -1133,15 +1154,19 @@ document.addEventListener('DOMContentLoaded', () => {
             
         } catch (error) {
             console.error('AI status check failed:', error);
-            
+
             // Provide more specific error messages
             let errorMessage = 'AI Status: Connection Failed';
             if (error.name === 'AbortError') {
                 errorMessage = 'AI Status: Connection Timeout';
+            } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
+                errorMessage = 'AI Status: CORS Error - Use local server';
+            } else if (error.message.includes('CORS')) {
+                errorMessage = 'AI Status: CORS Error - Use local server';
             } else if (error.message.includes('Failed to fetch')) {
                 errorMessage = 'AI Status: Cannot Reach Server';
             }
-            
+
             updateAIStatusIndicator('error', errorMessage);
         }
     }
