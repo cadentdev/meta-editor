@@ -18,8 +18,12 @@ test-results/
 playwright-report/
 playwright/.cache/
 
-# Screenshots generated during testing
+# Screenshots and test artifacts
 screenshots/
+*.png
+*.jpg
+*.jpeg
+test-artifacts/
 
 # macOS
 .DS_Store

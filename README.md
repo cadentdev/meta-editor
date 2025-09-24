@@ -150,6 +150,39 @@ The Meta Editor launches in Zen Mode for distraction-free writing:
 4. Select your **Preferred Model** from the dropdown
 5. Click **"Save Settings"** to persist your AI configuration
 
+#### Setting up Remote Ollama Server
+
+To use Ollama from a remote server (such as a Mac on your local network):
+
+**On the Ollama Host Machine:**
+
+1. **Stop any running Ollama service:**
+   ```bash
+   brew services stop ollama
+   ```
+
+2. **Start Ollama with network access and CORS support:**
+   ```bash
+   OLLAMA_HOST="0.0.0.0:11434" OLLAMA_ORIGINS="*" ollama serve
+   ```
+
+   This configuration:
+   - `OLLAMA_HOST="0.0.0.0:11434"` - Allows connections from any IP address on your network
+   - `OLLAMA_ORIGINS="*"` - Enables CORS for web browser access
+
+3. **Find your host machine's IP address:**
+   ```bash
+   ifconfig | grep "inet " | grep -v 127.0.0.1
+   ```
+
+**In Meta Editor:**
+
+1. Use your host machine's IP address and port in the endpoint field (e.g., `http://192.168.1.100:11434`)
+2. **Important:** Run Meta Editor from a local server (`npm run serve`) rather than opening the HTML file directly for best CORS compatibility
+3. The AI Status indicator will show green when successfully connected
+
+**Security Note:** The `OLLAMA_ORIGINS="*"` setting allows any website to access your Ollama server. For production use, consider restricting origins to specific IP addresses or domains.
+
 ### Interface Controls
 
 1. **Zen Mode**: Toggle between focused writing (Content + Preview only) and full interface
