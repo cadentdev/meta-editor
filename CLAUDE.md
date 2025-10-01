@@ -8,8 +8,8 @@ Meta Editor is a client-side web application that helps content creators add YAM
 
 ## Development Guidelines
 
-- Upon starting a new chat session, review the README.md and ROADMAP.md files to understand the project context.
-- Update the ROADMAP.md file with the current state of the project, including completed tasks and any new tasks that have been added.
+- Upon starting a new chat session, review the README.md, PRD.md, and TASKS.md files to understand the project context.
+- Update the TASKS.md file with the current state of development, including completed tasks and any new tasks that have been added.
 - Before starting your implementation of significant features (new functionality, refactoring, architecture changes, new libraries), describe your plan and ask for approval before proceeding. For minor changes (typos, styling tweaks, error fixes), proceed without confirmation.
 - If you aren't sure how to implement a feature, ask for help.
 - If you need more information to craft an effective implementation plan, ask for it.
@@ -18,7 +18,7 @@ Meta Editor is a client-side web application that helps content creators add YAM
 - After implementing features, run the appropriate test commands (npm test, npm run test:e2e) to verify functionality.
 - For visual changes, consider running visual regression tests (npm run test:visual) to ensure design consistency.
 - If implementation doesn't match expected behavior, revert changes and reassess the approach.
-- Once a new feature or change has been implemented, update the ROADMAP.md and README.md files to reflect the current state of the project, and prompt me to commit the changes.
+- Once a new feature or change has been implemented, update the TASKS.md and README.md files to reflect the current state of the project, and prompt me to commit the changes.
 
 ## Agent System
 

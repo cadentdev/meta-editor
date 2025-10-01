@@ -253,6 +253,14 @@ See `README-TESTING.md` for detailed testing documentation.
   - `menu-styles.css` - Styles for menu bar and toolbar
   - `script.js` - Application JavaScript
 
+## Documentation
+
+- **[PRD.md](PRD.md)** - Product Requirements Document with strategic vision, technical requirements, and success criteria
+- **[TASKS.md](TASKS.md)** - Active development tasks, current priorities, and backlog
+- **[RELEASE-NOTES.md](RELEASE-NOTES.md)** - Version history and completed features
+- **[README-TESTING.md](README-TESTING.md)** - Testing philosophy, procedures, and guidelines
+- **[CLAUDE.md](CLAUDE.md)** - Development guidelines for AI-assisted coding
+
 ## Getting Started
 
 Simply open `dist/index.html` in your web browser to start using the editor. No server setup or installation required.
