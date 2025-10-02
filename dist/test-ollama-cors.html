@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ollama CORS Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .pending { background-color: #fff3cd; border-color: #ffeaa7; }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        pre {
+            background-color: #f4f4f4;
+            padding: 10px;
+            border-radius: 3px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ollama API CORS Test</h1>
+
+    <div class="test-section">
+        <h2>Endpoint Configuration</h2>
+        <label>Ollama Endpoint:
+            <input type="text" id="endpoint" value="http://192.168.52.225:11434" style="width: 300px;">
+        </label>
+        <button onclick="testConnection()">Test Connection</button>
+    </div>
+
+    <div class="test-section pending" id="test-result">
+        <h2>Test Results</h2>
+        <div id="result-content">
+            <p>Click "Test Connection" to check if the Ollama API is accessible from the browser.</p>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>What This Tests</h2>
+        <ul>
+            <li>Network connectivity to Ollama server</li>
+            <li>CORS headers configuration</li>
+            <li>API response format</li>
+        </ul>
+    </div>
+
+    <script>
+        async function testConnection() {
+            const endpoint = document.getElementById('endpoint').value;
+            const resultDiv = document.getElementById('test-result');
+            const contentDiv = document.getElementById('result-content');
+
+            resultDiv.className = 'test-section pending';
+            contentDiv.innerHTML = '<p>Testing connection...</p>';
+
+            try {
+                const response = await fetch(`${endpoint}/api/tags`);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+
+                resultDiv.className = 'test-section success';
+                contentDiv.innerHTML = `
+                    <h3>✓ Success!</h3>
+                    <p><strong>Status:</strong> ${response.status} ${response.statusText}</p>
+                    <p><strong>Models Found:</strong> ${data.models ? data.models.length : 0}</p>
+                    <details>
+                        <summary>Full Response</summary>
+                        <pre>${JSON.stringify(data, null, 2)}</pre>
+                    </details>
+                `;
+
+                if (data.models && data.models.length > 0) {
+                    const modelList = data.models.map(m =>
+                        `• ${m.name} (${formatBytes(m.size)})`
+                    ).join('\n');
+                    contentDiv.innerHTML += `
+                        <details open>
+                            <summary>Available Models (${data.models.length})</summary>
+                            <pre>${modelList}</pre>
+                        </details>
+                    `;
+                }
+
+            } catch (error) {
+                resultDiv.className = 'test-section error';
+                contentDiv.innerHTML = `
+                    <h3>✗ Connection Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <h4>Possible Causes:</h4>
+                    <ul>
+                        <li>Ollama server is not running</li>
+                        <li>Incorrect endpoint URL</li>
+                        <li>CORS headers not configured (check OLLAMA_ORIGINS environment variable)</li>
+                        <li>Firewall blocking the connection</li>
+                        <li>Network connectivity issues</li>
+                    </ul>
+                    <h4>To Fix CORS Issues:</h4>
+                    <pre>export OLLAMA_ORIGINS="*"
+export OLLAMA_HOST="0.0.0.0:11434"</pre>
+                `;
+                console.error('Connection error:', error);
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+        }
+
+        // Auto-test on load
+        window.addEventListener('load', () => {
+            // Give the page a moment to render
+            setTimeout(testConnection, 500);
+        });
+    </script>
+</body>
+</html>
