@@ -119,8 +119,8 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - `dist/script.js` - All application logic (~1100 lines of vanilla JavaScript) with AI settings functionality
 - `dist/styles.css` - Main application styling with rem-based responsive design and modal components
 - `dist/menu-styles.css` - Menu bar and toolbar specific styles
-- `tests/` - Comprehensive Jest test suite with 132+ unit tests including Settings functionality
-- `tests/settings.test.js` - Complete test coverage for AI settings, validation, and modal interactions
+- `unit-tests/` - Comprehensive Jest test suite with 132+ unit tests including Settings functionality
+- `unit-tests/settings.test.js` - Complete test coverage for AI settings, validation, and modal interactions
 - `e2e-tests/` - Playwright E2E tests for cross-browser functionality validation
 - `playwright.config.js` - Playwright configuration for E2E testing
 - `mcp-server.json` - MCP (Model Context Protocol) server configuration
@@ -138,7 +138,7 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - `loadUIState()` and `applyUIState()` handle persistence and application
 - Dynamic menu text updates based on current state
 
-### Validation System (`script.js` + `tests/validation.test.js`)
+### Validation System (`script.js` + `unit-tests/validation.test.js`)
 - Real-time validation for filename, title, date, and summary fields
 - Filename validation enforces lowercase-with-hyphens format
 - Summary character count with 160 character recommended limit
@@ -220,7 +220,7 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 ### External Library Integration
 Libraries are loaded via CDN in the HTML. For new libraries:
 1. Add CDN link to `dist/index.html`
-2. Add mock to `tests/setup.js` for testing
+2. Add mock to `unit-tests/setup.js` for testing
 3. Update any global references in code
 
 ### Adding E2E Tests
@@ -241,7 +241,7 @@ The MCP server enables AI-driven browser automation:
 
 ### Test File Organization
 
-#### Unit Tests (`tests/`)
+#### Unit Tests (`unit-tests/`)
 - `validation.test.js` - Input validation functions
 - `ui-state.test.js` - UI visibility and state management
 - `data-transformation.test.js` - Preview generation and data processing
@@ -255,7 +255,7 @@ The MCP server enables AI-driven browser automation:
 - Test configuration in `playwright.config.js` with multi-browser support
 
 ### Mock Strategy
-- All browser APIs are comprehensively mocked in `tests/setup.js`
+- All browser APIs are comprehensively mocked in `unit-tests/setup.js`
 - External libraries (marked, js-yaml) have simple mocks
 - FileReader mock simulates both text and image file handling
 - localStorage mock provides full API simulation

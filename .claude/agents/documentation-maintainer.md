@@ -45,6 +45,7 @@ You are an expert technical documentation specialist with deep expertise in main
 
 - This is a client-side web application with no build process
 - The project uses vanilla JavaScript with comprehensive Jest and Playwright testing
+- Test organization: `unit-tests/` for Jest unit tests, `e2e-tests/` for Playwright E2E tests
 - Agent-based development workflow is central to the project
 - UI state management and local storage are key architectural patterns
 - Documentation should reflect the current testing strategy (Chromium desktop for early development, full cross-browser testing later)

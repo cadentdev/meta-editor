@@ -40,12 +40,12 @@ The Meta Editor uses a three-tiered testing approach:
 
 ### Test Files
 
-- `tests/setup.js` - Jest configuration and mocks
-- `tests/validation.test.js` - Input validation functions
-- `tests/ui-state.test.js` - UI state management
-- `tests/data-transformation.test.js` - Data processing and preview generation
-- `tests/localStorage.test.js` - Local storage operations
-- `tests/menu-actions.test.js` - Menu action handlers
+- `unit-tests/setup.js` - Jest configuration and mocks
+- `unit-tests/validation.test.js` - Input validation functions
+- `unit-tests/ui-state.test.js` - UI state management
+- `unit-tests/data-transformation.test.js` - Data processing and preview generation
+- `unit-tests/localStorage.test.js` - Local storage operations
+- `unit-tests/menu-actions.test.js` - Menu action handlers
 
 ### Coverage Areas
 
