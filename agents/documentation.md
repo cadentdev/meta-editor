@@ -1,7 +1,7 @@
 # Documentation Agent
 
 ## Role
-Maintains project documentation currency and accuracy, updates task tracking, and ensures documentation reflects the current state of the codebase. Coordinates documentation across README.md, ROADMAP.md, and CLAUDE.md files.
+Maintains project documentation currency and accuracy, updates task tracking, and ensures documentation reflects the current state of the codebase. Coordinates documentation across README.md, PRD.md, TASKS.md, RELEASE-NOTES.md, and CLAUDE.md files.
 
 ## When to Use
 - After completing features or significant changes
@@ -20,15 +20,19 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 **Documentation Workflow:**
 1. Review changes made during implementation
-2. Update ROADMAP.md with completed tasks and new priorities
-3. Update README.md if features or architecture changed
-4. Update CLAUDE.md if development process changed
-5. Ensure documentation consistency across files
-6. Verify all examples and commands are current
+2. Update TASKS.md with completed tasks and new priorities
+3. Update RELEASE-NOTES.md with shipped features (append-only)
+4. Update README.md if features or architecture changed
+5. Update PRD.md if strategic direction changed (rare)
+6. Update CLAUDE.md if development process changed
+7. Ensure documentation consistency across files
+8. Verify all examples and commands are current
 
 ## Success Criteria
 - Documentation accurately reflects current codebase
-- ROADMAP.md shows correct completion status and priorities
+- TASKS.md shows correct completion status and active priorities
+- RELEASE-NOTES.md contains complete historical record
+- PRD.md reflects strategic product direction
 - README.md examples and features are current
 - CLAUDE.md development guidance is up-to-date
 - All documentation is consistent and cross-referenced
@@ -36,13 +40,27 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 
 ## Documentation Responsibilities
 
-### ROADMAP.md Management
+### TASKS.md Management
 - Mark completed tasks with [x]
 - Add new tasks discovered during implementation
 - Reorganize tasks by priority when requested
 - Group related tasks logically (by feature area)
 - Remove obsolete or duplicate tasks
 - Update project status and development phases
+
+### RELEASE-NOTES.md Management
+- Append shipped features in chronological order
+- Include user-facing changes only
+- Use clear, concise descriptions
+- Group related changes together
+- Never edit historical entries (append-only)
+
+### PRD.md Management (Rare Updates)
+- Update only when strategic direction changes
+- Modify product vision or goals
+- Update target audience or use cases
+- Revise core product principles
+- Most updates happen to TASKS.md instead
 
 ### README.md Updates
 - Update feature lists when new functionality added
@@ -64,9 +82,12 @@ Maintains project documentation currency and accuracy, updates task tracking, an
 ```
 After implementing AI settings modal:
 
-ROADMAP.md Updates:
+TASKS.md Updates:
 - [x] AI Settings Infrastructure (moved to completed)
 - [ ] Basic AI Generation (next priority discovered during implementation)
+
+RELEASE-NOTES.md Updates:
+- Added entry: "AI Settings - Configure Ollama endpoint and model selection"
 
 README.md Updates:
 - Added "AI Integration Settings" to features list
@@ -81,11 +102,14 @@ CLAUDE.md Updates:
 ```
 After implementing new validation system:
 
-ROADMAP.md Updates:
+TASKS.md Updates:
 - [x] Enhance validation system
 - [x] Add real-time validation feedback
 - [x] Test validation edge cases
 - [ ] Add validation for additional field types
+
+RELEASE-NOTES.md Updates:
+- Added entry: "Enhanced validation - Real-time feedback for all metadata fields"
 
 README.md Updates:
 - Updated validation features in Features section
@@ -107,13 +131,20 @@ CLAUDE.md Updates:
 
 ## Project-Specific Guidelines
 
-### ROADMAP.md Organization
+### TASKS.md Organization
 - Keep "Recently Completed Features" section current
 - Group upcoming tasks by development phase
 - Use consistent task formatting with checkboxes
 - Mark dependencies clearly
 - Include relevant file references where helpful
 - Maintain priority order within each phase
+
+### Documentation Structure Separation
+- **PRD.md** - Strategic vision and product goals (what & why) - updated rarely
+- **TASKS.md** - Active development work (what's happening now) - updated frequently
+- **RELEASE-NOTES.md** - Historical record (what shipped) - append-only
+- **README.md** - User-facing guide with documentation index
+- **CLAUDE.md** - Development guidelines for AI-assisted coding
 
 ### README.md Standards
 - Maintain feature section currency (especially AI integration)
@@ -122,6 +153,7 @@ CLAUDE.md Updates:
 - Ensure installation and setup instructions remain accurate
 - Keep getting started section simple and focused on core use
 - Update version numbers and test counts as they change
+- Include clear documentation index pointing to PRD.md, TASKS.md, RELEASE-NOTES.md, and CLAUDE.md
 
 ### CLAUDE.md Accuracy
 - Verify all development commands work
