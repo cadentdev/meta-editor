@@ -422,8 +422,30 @@ button:hover {
 }
 
 .btn:disabled {
-    opacity: 0.6;
+    background-color: #dee2e6 !important;
+    border-color: #dee2e6 !important;
+    color: #6c757d !important;
     cursor: not-allowed;
+    opacity: 0.65;
+}
+
+/* Disabled form elements */
+.form-group.disabled label,
+.form-group.disabled select,
+.form-group.disabled .help-text {
+    color: #6c757d;
+    opacity: 0.6;
+}
+
+.form-group.disabled select {
+    background-color: #f8f9fa;
+    border-color: #dee2e6;
+    cursor: not-allowed;
+}
+
+.form-group.disabled select:focus {
+    border-color: #dee2e6;
+    box-shadow: none;
 }
 
 /* Status and Help Text */
@@ -450,6 +472,77 @@ button:hover {
     color: #666;
     margin-top: 0.25rem;
     line-height: 1.4;
+}
+
+.help-text-italic {
+    font-style: italic;
+}
+
+/* Checkbox styling for modal */
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.checkbox-container input[type="checkbox"] {
+    width: auto !important;
+    margin: 0;
+    transform: scale(1.2);
+}
+
+.checkbox-text {
+    color: #333;
+    font-weight: normal;
+    cursor: pointer;
+    flex: 1;
+}
+
+/* Readonly input styling */
+.modal .form-group input[readonly] {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    cursor: default;
+}
+
+/* Disabled button styling */
+.btn:disabled {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #6c757d !important;
+    cursor: not-allowed !important;
+    opacity: 0.65;
+}
+
+.btn:disabled:hover {
+    background-color: #e9ecef !important;
+    border-color: #dee2e6 !important;
+    color: #6c757d !important;
+}
+
+/* Hidden form group styling - must override modal display block */
+.modal #model-selection-group[style*="display: none"] {
+    display: none !important;
+}
+
+/* Disabled form group styling */
+.form-group.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.form-group.disabled label,
+.form-group.disabled .help-text {
+    color: #6c757d;
+}
+
+.form-group.disabled select,
+.form-group.disabled input {
+    background-color: #f8f9fa;
+    color: #6c757d;
+    border-color: #dee2e6;
+    cursor: not-allowed;
 }
 
 /* Markdown styling for preview */

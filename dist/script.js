@@ -949,24 +949,66 @@ document.addEventListener('DOMContentLoaded', () => {
     const settingsClose = document.getElementById('settings-close');
     const settingsCancel = document.getElementById('settings-cancel');
     const settingsSave = document.getElementById('settings-save');
-    const ollamaEndpointInput = document.getElementById('ollama-endpoint');
+    const ollamaServerInput = document.getElementById('ollama-server');
+    const ollamaPortInput = document.getElementById('ollama-port');
+    const ollamaSecureCheckbox = document.getElementById('ollama-secure');
+    const generatedEndpointInput = document.getElementById('generated-endpoint');
     const fetchModelsBtn = document.getElementById('fetch-models-btn');
     const fetchStatus = document.getElementById('fetch-status');
     const modelSelectionGroup = document.getElementById('model-selection-group');
     const preferredModelSelect = document.getElementById('preferred-model');
-    const endpointValidation = document.getElementById('endpoint-validation');
+    const serverValidation = document.getElementById('server-validation');
+    const portValidation = document.getElementById('port-validation');
 
     // Settings state
     let aiSettings = {
-        ollamaEndpoint: 'http://localhost:11434',
+        ollamaEndpoint: 'http://localhost:11434', // Backward compatibility
+        ollamaServer: 'localhost',
+        ollamaPort: 11434,
+        ollamaSecure: false,
         preferredModel: ''
     };
+
+    function migrateOldEndpoint(endpoint) {
+        try {
+            const url = new URL(endpoint);
+            return {
+                ollamaServer: url.hostname,
+                ollamaPort: parseInt(url.port || (url.protocol === 'https:' ? '443' : '80'), 10),
+                ollamaSecure: url.protocol === 'https:'
+            };
+        } catch {
+            // If parsing fails, return defaults
+            return {
+                ollamaServer: 'localhost',
+                ollamaPort: 11434,
+                ollamaSecure: false
+            };
+        }
+    }
 
     function loadAISettings() {
         try {
             const saved = localStorage.getItem('aiSettings');
             if (saved) {
-                aiSettings = { ...aiSettings, ...JSON.parse(saved) };
+                const savedSettings = JSON.parse(saved);
+
+                // Backward compatibility: migrate old endpoint format
+                if (savedSettings.ollamaEndpoint && !savedSettings.ollamaServer) {
+                    const migrated = migrateOldEndpoint(savedSettings.ollamaEndpoint);
+                    savedSettings.ollamaServer = migrated.ollamaServer;
+                    savedSettings.ollamaPort = migrated.ollamaPort;
+                    savedSettings.ollamaSecure = migrated.ollamaSecure;
+                }
+
+                aiSettings = { ...aiSettings, ...savedSettings };
+
+                // Update ollamaEndpoint for backward compatibility
+                aiSettings.ollamaEndpoint = generateEndpointURL(
+                    aiSettings.ollamaServer,
+                    aiSettings.ollamaPort,
+                    aiSettings.ollamaSecure
+                ) || aiSettings.ollamaEndpoint;
             }
         } catch (error) {
             console.error('Error loading AI settings:', error);
@@ -983,19 +1025,98 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openSettingsModal() {
         loadAISettings();
-        ollamaEndpointInput.value = aiSettings.ollamaEndpoint;
+
+        // Populate the new separate fields
+        ollamaServerInput.value = aiSettings.ollamaServer;
+        ollamaPortInput.value = aiSettings.ollamaPort;
+        ollamaSecureCheckbox.checked = aiSettings.ollamaSecure;
         preferredModelSelect.value = aiSettings.preferredModel;
-        
-        // Hide model selection initially
-        modelSelectionGroup.style.display = 'none';
+
+        // Update the generated endpoint display
+        updateEndpointDisplay();
+
+        // Set initial disabled states
+        // Only show model selection if there's already a saved model AND models have been fetched before
+        if (aiSettings.preferredModel && preferredModelSelect.options.length > 1) {
+            modelSelectionGroup.style.display = 'block';
+            modelSelectionGroup.classList.remove('disabled');
+        } else {
+            modelSelectionGroup.style.display = 'none';
+            modelSelectionGroup.classList.add('disabled');
+        }
+
+        // Enable Save button only if a model is already selected
+        settingsSave.disabled = !aiSettings.preferredModel;
+
+        // Clear status and validation messages
         fetchStatus.textContent = '';
-        endpointValidation.textContent = '';
-        
+        serverValidation.textContent = '';
+        portValidation.textContent = '';
+
         settingsModal.style.display = 'block';
     }
 
     function closeSettingsModal() {
         settingsModal.style.display = 'none';
+    }
+
+    function validateServer(server) {
+        if (!server || typeof server !== 'string') return false;
+        server = server.trim();
+
+        // Check for empty string
+        if (server.length === 0) return false;
+
+        // Check for invalid characters (no spaces, basic validation)
+        if (/\s/.test(server)) return false;
+
+        // Allow localhost, IP addresses, and domain names
+        // This is a basic validation - more complex regex could be used
+        const serverPattern = /^([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+$|^localhost$|^(\d{1,3}\.){3}\d{1,3}$/;
+        return serverPattern.test(server);
+    }
+
+    function validatePort(port) {
+        if (port == null) return false;
+        const trimmedPort = String(port).trim();
+        const portNum = parseInt(trimmedPort, 10);
+        return !isNaN(portNum) && portNum >= 1 && portNum <= 65535;
+    }
+
+    function generateEndpointURL(server, port, secure) {
+        if (!validateServer(server) || !validatePort(port)) {
+            return '';
+        }
+
+        const protocol = secure ? 'https' : 'http';
+        return `${protocol}://${server}:${port}`;
+    }
+
+    function updateEndpointDisplay() {
+        const server = ollamaServerInput.value.trim();
+        const port = ollamaPortInput.value.trim();
+        const secure = ollamaSecureCheckbox.checked;
+
+        const generatedURL = generateEndpointURL(server, port, secure);
+        generatedEndpointInput.value = generatedURL || 'Invalid configuration';
+
+        // Update fetch button state based on URL validity
+        const isValidURL = generatedURL && validateEndpoint(generatedURL);
+        fetchModelsBtn.disabled = !isValidURL;
+
+        if (isValidURL) {
+            fetchModelsBtn.className = 'btn btn-primary';
+        } else {
+            fetchModelsBtn.className = 'btn btn-secondary';
+        }
+
+        // Clear validation messages if inputs are valid
+        if (validateServer(server)) {
+            serverValidation.textContent = '';
+        }
+        if (validatePort(port)) {
+            portValidation.textContent = '';
+        }
     }
 
     function validateEndpoint(url) {
@@ -1008,14 +1129,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     async function fetchAvailableModels() {
-        const endpoint = ollamaEndpointInput.value.trim();
+        const server = ollamaServerInput.value.trim();
+        const port = ollamaPortInput.value.trim();
+        const secure = ollamaSecureCheckbox.checked;
 
-        if (!validateEndpoint(endpoint)) {
-            endpointValidation.textContent = 'Please enter a valid URL (e.g., http://localhost:11434)';
+        // Validate individual components
+        if (!validateServer(server)) {
+            serverValidation.textContent = 'Please enter a valid server address (e.g., localhost, 192.168.1.100)';
             return;
         }
 
-        endpointValidation.textContent = '';
+        if (!validatePort(port)) {
+            portValidation.textContent = 'Please enter a valid port number (1-65535)';
+            return;
+        }
+
+        const endpoint = generateEndpointURL(server, port, secure);
+        if (!endpoint) {
+            fetchStatus.textContent = 'Invalid server configuration';
+            fetchStatus.className = 'status-text error';
+            return;
+        }
+
+        // Clear validation messages
+        serverValidation.textContent = '';
+        portValidation.textContent = '';
         fetchModelsBtn.disabled = true;
         fetchStatus.textContent = 'Fetching models...';
         fetchStatus.className = 'status-text loading';
@@ -1043,6 +1181,9 @@ document.addEventListener('DOMContentLoaded', () => {
             if (models.length === 0) {
                 fetchStatus.textContent = 'No models found on this Ollama instance';
                 fetchStatus.className = 'status-text error';
+                modelSelectionGroup.style.display = 'none';
+                modelSelectionGroup.classList.add('disabled');
+                settingsSave.disabled = true;
                 return;
             }
 
@@ -1055,8 +1196,12 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             modelSelectionGroup.style.display = 'block';
+            modelSelectionGroup.classList.remove('disabled');
             fetchStatus.textContent = `Found ${models.length} model(s)`;
             fetchStatus.className = 'status-text success';
+
+            // Enable the Save button if a model is selected, otherwise keep it disabled
+            settingsSave.disabled = !preferredModelSelect.value;
 
         } catch (error) {
             // Handle CORS and connection errors with more helpful messages
@@ -1070,8 +1215,18 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchStatus.textContent = `Failed to connect: ${errorMessage}`;
             fetchStatus.className = 'status-text error';
             modelSelectionGroup.style.display = 'none';
+            modelSelectionGroup.classList.add('disabled');
+
+            // Disable Save button when fetch fails
+            settingsSave.disabled = true;
         } finally {
-            fetchModelsBtn.disabled = false;
+            // Re-enable fetch button only if URL is still valid
+            const server = ollamaServerInput.value.trim();
+            const port = ollamaPortInput.value.trim();
+            const secure = ollamaSecureCheckbox.checked;
+            const generatedURL = generateEndpointURL(server, port, secure);
+            const isValidURL = generatedURL && validateEndpoint(generatedURL);
+            fetchModelsBtn.disabled = !isValidURL;
         }
     }
 
@@ -1084,24 +1239,44 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function saveSettings() {
-        const endpoint = ollamaEndpointInput.value.trim();
-        
-        if (!validateEndpoint(endpoint)) {
-            endpointValidation.textContent = 'Please enter a valid URL';
+        const server = ollamaServerInput.value.trim();
+        const port = ollamaPortInput.value.trim();
+        const secure = ollamaSecureCheckbox.checked;
+
+        // Validate individual components
+        if (!validateServer(server)) {
+            serverValidation.textContent = 'Please enter a valid server address';
             return;
         }
-        
-        aiSettings.ollamaEndpoint = endpoint;
+
+        if (!validatePort(port)) {
+            portValidation.textContent = 'Please enter a valid port number (1-65535)';
+            return;
+        }
+
+        // Generate endpoint URL for backward compatibility
+        const endpoint = generateEndpointURL(server, port, secure);
+        if (!endpoint) {
+            fetchStatus.textContent = 'Invalid server configuration';
+            fetchStatus.className = 'status-text error';
+            return;
+        }
+
+        // Update settings with both new and legacy format
+        aiSettings.ollamaServer = server;
+        aiSettings.ollamaPort = parseInt(port, 10);
+        aiSettings.ollamaSecure = secure;
+        aiSettings.ollamaEndpoint = endpoint; // Backward compatibility
         aiSettings.preferredModel = preferredModelSelect.value;
-        
+
         saveAISettings();
         closeSettingsModal();
-        
+
         statusMessage.textContent = 'Settings saved successfully';
         setTimeout(() => {
             statusMessage.textContent = 'Version 0.2';
         }, 2000);
-        
+
         // Trigger AI status check after saving settings
         scheduleStatusCheck(500);
     }
@@ -1199,6 +1374,16 @@ document.addEventListener('DOMContentLoaded', () => {
     settingsCancel.addEventListener('click', closeSettingsModal);
     settingsSave.addEventListener('click', saveSettings);
     fetchModelsBtn.addEventListener('click', fetchAvailableModels);
+
+    // Real-time endpoint updates
+    ollamaServerInput.addEventListener('input', updateEndpointDisplay);
+    ollamaPortInput.addEventListener('input', updateEndpointDisplay);
+    ollamaSecureCheckbox.addEventListener('change', updateEndpointDisplay);
+
+    // Model selection handler for enabling Save button
+    preferredModelSelect.addEventListener('change', function() {
+        settingsSave.disabled = !preferredModelSelect.value;
+    });
     
     // AI Status event listeners
     aiStatusBtn.addEventListener('mouseenter', () => {

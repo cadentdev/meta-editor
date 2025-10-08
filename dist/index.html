@@ -169,10 +169,31 @@
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label for="ollama-endpoint">Ollama Endpoint URL</label>
-                    <input type="url" id="ollama-endpoint" placeholder="http://localhost:11434" value="http://localhost:11434">
-                    <span class="validation-message" id="endpoint-validation"></span>
-                    <div class="help-text">Enter the URL for your Ollama server (e.g., http://localhost:11434)</div>
+                    <label for="ollama-server">Server Address</label>
+                    <input type="text" id="ollama-server" placeholder="localhost" value="localhost">
+                    <span class="validation-message" id="server-validation"></span>
+                    <div class="help-text">Enter the hostname or IP address (e.g., localhost, 192.168.1.100)</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="ollama-port">Port Number</label>
+                    <input type="number" id="ollama-port" placeholder="11434" value="11434" min="1" max="65535">
+                    <span class="validation-message" id="port-validation"></span>
+                    <div class="help-text">Enter the port number (default: 11434)</div>
+                </div>
+
+                <div class="form-group">
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="ollama-secure">
+                        <span class="checkbox-text">Use HTTPS (secure connection)</span>
+                    </div>
+                    <div class="help-text help-text-italic">Enable for secure connections or when using a reverse proxy with SSL</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="generated-endpoint">Generated Endpoint URL</label>
+                    <input type="text" id="generated-endpoint" value="http://localhost:11434" readonly>
+                    <div class="help-text help-text-italic">This URL is automatically generated from your settings above</div>
                 </div>
                 
                 <div class="form-group">

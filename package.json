@@ -24,7 +24,7 @@
   "author": "CadentDev",
   "license": "GNU General Public License v3.0",
   "devDependencies": {
-    "@playwright/test": "^1.55.0",
+    "@playwright/test": "^1.56.0",
     "@testing-library/jest-dom": "^6.1.4",
     "http-server": "^14.1.1",
     "jest": "^29.7.0",
