@@ -22,52 +22,54 @@ Meta Editor is a client-side web application that helps content creators add YAM
 
 ## Agent System
 
-This project uses specialized agents for different development phases. Each agent has specific capabilities and constraints defined in their dossier files.
+This project uses specialized agents for different development phases. Each agent has specific capabilities and is available through Claude Code's built-in Task tool.
 
 ### Available Agents
 
-- `agents/planning.md` - Feature analysis and implementation planning
-- `agents/implementation.md` - Code changes and feature development  
-- `agents/testing.md` - Test execution and validation
-- `agents/review.md` - Code quality assessment
-- `agents/documentation.md` - Documentation updates and maintenance
+- `feature-planner` - Feature analysis and implementation planning
+- `code-implementation` - Code changes and feature development
+- `testing-agent` - Test execution and validation
+- `code-reviewer` - Code quality assessment
+- `documentation-maintainer` - Documentation updates and maintenance
 
 ### Usage
 
-Reference agents by their "dossier" file when requesting specific expertise:
+Use the Task tool with the appropriate subagent_type to invoke specific expertise:
 
-- "Use `agents/planning.md` to break down the video gallery feature"
-- "Have `agents/testing.md` run the full test suite and validate with Playwright"
-- "Call `agents/review.md` to assess the slider changes before testing"
+- Use `feature-planner` to analyze requirements and create implementation plans
+- Use `code-implementation` to execute approved plans and implement features
+- Use `testing-agent` to run tests and validate functionality with Playwright
+- Use `code-reviewer` to assess code quality and adherence to conventions
+- Use `documentation-maintainer` to update project documentation
 
 ### Agent Workflow
 
 **Typical Feature Development:**
 
-1. `agents/planning.md` → Research and create implementation plan
-2. `agents/implementation.md` → Execute approved plan  
-3. `agents/testing.md` → Validate functionality using Chromium desktop only
-4. `agents/review.md` → Assess code quality and adherence to conventions
-5. `agents/documentation.md` → Update project documentation
+1. `feature-planner` → Research and create implementation plan
+2. `code-implementation` → Execute approved plan
+3. `testing-agent` → Validate functionality using Chromium desktop only
+4. `code-reviewer` → Assess code quality and adherence to conventions
+5. `documentation-maintainer` → Update project documentation
 6. **Later (pre-production):** Full cross-browser and responsive testing
 
 **Styling/Visual Changes Workflow:**
 
-1. `agents/planning.md` → Research and create implementation plan
-2. `agents/implementation.md` → Execute approved plan  
-3. `agents/testing.md` → Validate functionality using Chromium desktop only
+1. `feature-planner` → Research and create implementation plan
+2. `code-implementation` → Execute approved plan
+3. `testing-agent` → Validate functionality using Chromium desktop only
 4. Update code as necessary based on testing feedback
 5. Restart local server and open browser for user review
 6. **Later (pre-production):** Test across all browsers and viewports
 
 **Bug Fix Workflow:**
 
-1. `agents/implementation.md` → Apply fixes
-2. `agents/testing.md` → Verify resolution
+1. `code-implementation` → Apply fixes
+2. `testing-agent` → Verify resolution
 
 **Documentation Updates:**
 
-1. `agents/documentation.md` → Maintain current documentation state
+1. `documentation-maintainer` → Maintain current documentation state
 
 ## Development Commands
 
