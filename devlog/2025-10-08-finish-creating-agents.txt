@@ -1,0 +1,152 @@
+╭───────────────────────────────────────────────────╮
+│ ✻ Welcome to Claude Code!                         │
+│                                                   │
+│   /help for help, /status for your current setup  │
+│                                                   │
+│   cwd: /Users/neil/Repos/cadentdev/meta-editor    │
+╰───────────────────────────────────────────────────╯
+
+> /agents 
+  ⎿  Agent changes:
+     Created agent: code-implementation
+     Created agent: feature-planner
+     Created agent: code-reviewer
+
+> Update the Agent Workflow section in @CLAUDE.md to reflect our 
+  preference to use the new agents created in `.claude/agents`
+  ⎿  Read CLAUDE.md (263 lines)
+
+⏺ I'll update the Agent Workflow section in CLAUDE.md to reflect the
+  new agents created in .claude/agents.
+
+⏺ Update(CLAUDE.md)
+  ⎿  Updated CLAUDE.md with 23 additions and 21 removals            
+       22    
+       23    ## Agent System
+       24    
+       25 -  This project uses specialized agents for different 
+          -  development phases. Each agent has specific 
+          -  capabilities and constraints defined in their dossier 
+          -  files.
+       25 +  This project uses specialized agents for different 
+          +  development phases. Each agent has specific 
+          +  capabilities and is available through Claude Code's 
+          +  built-in Task tool.
+       26    
+       27    ### Available Agents
+       28    
+       29 -  - `agents/planning.md
+          -  ` - Feature analysis and implementation planning
+       30 -  - `agents/implementation.md
+          -  ` - Code changes and feature development  
+       31 -  - `agents/testing.md` - Test execution and validation
+       32 -  - `agents/review.md` - Code quality assessment
+       33 -  - `agents/documentation.md
+          -  ` - Documentation updates and maintenance
+       29 +  - `feature-planner
+          +  ` - Feature analysis and implementation planning
+       30 +  - `code-implementation
+          +  ` - Code changes and feature development
+       31 +  - `testing-agent` - Test execution and validation
+       32 +  - `code-reviewer` - Code quality assessment
+       33 +  - `documentation-maintainer
+          +  ` - Documentation updates and maintenance
+       34    
+       35    ### Usage
+       36    
+       37 -  Reference agents by their "dossier" file when 
+          - requesting specific expertise:
+       37 +  Use the Task tool with the appropriate subagent_type to
+          +  invoke specific expertise:
+       38    
+       39 -  - "Use `agents/planning.md` to break down the video 
+          - gallery feature"
+       40 -  - "Have `agents/testing.md` run the full test suite and
+          -  validate with Playwright"
+       41 -  - "Call `agents/review.md` to assess the slider changes
+          -  before testing"
+       39 +  - Use `feature-planner` to analyze requirements and 
+          + create implementation plans
+       40 +  - Use `code-implementation` to execute approved plans 
+          + and implement features
+       41 +  - Use `testing-agent` to run tests and validate 
+          + functionality with Playwright
+       42 +  - Use `code-reviewer` to assess code quality and 
+          + adherence to conventions
+       43 +  - Use `documentation-maintainer` to update project 
+          + documentation
+       44    
+       45    ### Agent Workflow
+       46    
+       47    **Typical Feature Development:**
+       48    
+       49 -  1. `agents/planning.md
+          -  ` → Research and create implementation plan
+       50 -  2. `agents/implementation.md` → Execute approved plan  
+       51 -  3. `agents/testing.md
+          -  ` → Validate functionality using Chromium desktop only
+       52 -  4. `agents/review.md
+          -  ` → Assess code quality and adherence to conventions
+       53 -  5. `agents/documentation.md
+          -  ` → Update project documentation
+       49 +  1. `feature-planner
+          +  ` → Research and create implementation plan
+       50 +  2. `code-implementation` → Execute approved plan
+       51 +  3. `testing-agent
+          +  ` → Validate functionality using Chromium desktop only
+       52 +  4. `code-reviewer
+          +  ` → Assess code quality and adherence to conventions
+       53 +  5. `documentation-maintainer
+          +  ` → Update project documentation
+       54    6. **Later (pre-production):** Full cross-browser and 
+            responsive testing
+       55    
+       56    **Styling/Visual Changes Workflow:**
+       57    
+       58 -  1. `agents/planning.md
+          -  ` → Research and create implementation plan
+       59 -  2. `agents/implementation.md` → Execute approved plan  
+       60 -  3. `agents/testing.md
+          -  ` → Validate functionality using Chromium desktop only
+       58 +  1. `feature-planner
+          +  ` → Research and create implementation plan
+       59 +  2. `code-implementation` → Execute approved plan
+       60 +  3. `testing-agent
+          +  ` → Validate functionality using Chromium desktop only
+       61    4. Update code as necessary based on testing feedback
+       62    5. Restart local server and open browser for user 
+            review
+       63    6. **Later (pre-production):** Test across all browsers
+             and viewports
+       64    
+       65    **Bug Fix Workflow:**
+       66    
+       67 -  1. `agents/implementation.md` → Apply fixes
+       68 -  2. `agents/testing.md` → Verify resolution
+       67 +  1. `code-implementation` → Apply fixes
+       68 +  2. `testing-agent` → Verify resolution
+       69    
+       70    **Documentation Updates:**
+       71    
+       72 -  1. `agents/documentation.md
+          -  ` → Maintain current documentation state
+       72 +  1. `documentation-maintainer
+          +  ` → Maintain current documentation state
+       73    
+       74    ## Development Commands
+       75    
+
+     Tip: Use # to memorize shortcut to quickly add to CLAUDE.md
+
+⏺ The Agent System section in CLAUDE.md has been updated to reflect the
+   new agents created in .claude/agents. The changes include:
+
+  1. Updated the description to mention Claude Code's built-in Task
+  tool
+  2. Changed agent names to match the new ones: feature-planner,
+  code-implementation, testing-agent, code-reviewer, and
+  documentation-maintainer
+  3. Updated usage instructions to reference the Task tool with
+  subagent_type
+  4. Updated all workflow sections to use the new agent names
+
