@@ -20,11 +20,11 @@ test.describe('Meta Editor Basic Functionality', () => {
 
   test('should toggle to full mode when Show All is clicked', async ({ page }) => {
     // Click on View menu specifically
-    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
-    
+    await page.locator('.menu-title').filter({ hasText: 'View' }).click();
+
     // Click "Show All Meta Data"
     await page.locator('#zen-toggle-menu').click();
-    
+
     // Now metadata fields should be visible
     await expect(page.locator('#title')).toBeVisible();
     await expect(page.locator('#filename')).toBeVisible();
@@ -33,12 +33,12 @@ test.describe('Meta Editor Basic Functionality', () => {
 
   test('should validate filename format', async ({ page }) => {
     // First show all fields
-    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
+    await page.locator('.menu-title').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
-    
+
     // Enter invalid filename
     await page.fill('#filename', 'Invalid File Name');
-    
+
     // Check for validation error
     await expect(page.locator('#filename-validation')).toContainText('lowercase');
   });
@@ -55,45 +55,45 @@ test.describe('Meta Editor Basic Functionality', () => {
   test('should copy markdown to clipboard', async ({ page }) => {
     // Add some content
     await page.fill('#content', 'Test content for copying');
-    
-    // Click Edit menu
-    await page.locator('.menu-item').filter({ hasText: 'Edit' }).click();
-    
+
+    // Click Edit menu - use exact text match to avoid conflict with "MetaEditor"
+    await page.locator('.menu-title:has-text("Edit")').nth(1).click();
+
     // Click Copy Markdown Preview
     await page.locator('text=Copy Markdown Preview').click();
-    
-    // Check status message
-    await expect(page.locator('#status-message')).toContainText('copied');
+
+    // Check status message (case-insensitive)
+    await expect(page.locator('#status-message')).toContainText(/copied/i);
   });
 
   test('should maintain UI state independently', async ({ page }) => {
     // Toggle toolbar off
-    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
+    await page.locator('.menu-title').filter({ hasText: 'View' }).click();
     await page.locator('#toolbar-toggle-menu').click();
-    
+
     // Toolbar should be hidden
     await expect(page.locator('#toolbar')).not.toBeVisible();
-    
+
     // But we should still be able to toggle Zen Mode
-    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
+    await page.locator('.menu-title').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
-    
+
     // Fields should now be visible
     await expect(page.locator('#title')).toBeVisible();
   });
 
   test('should handle tag input', async ({ page }) => {
     // Show all fields first
-    await page.locator('.menu-item').filter({ hasText: 'View' }).click();
+    await page.locator('.menu-title').filter({ hasText: 'View' }).click();
     await page.locator('#zen-toggle-menu').click();
-    
+
     // Add a tag
     await page.fill('#tags-input', 'javascript');
     await page.press('#tags-input', 'Enter');
-    
+
     // Tag should appear in container
     await expect(page.locator('#tags-container')).toContainText('javascript');
-    
+
     // Input should be cleared
     await expect(page.locator('#tags-input')).toHaveValue('');
   });

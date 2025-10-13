@@ -103,6 +103,7 @@ You can even add a hero image to your post in Meta Editor by uploading the image
 - **Improved Layout**: Content field positioned at bottom with H2 heading for better workflow
 - **AI Integration Settings**: Configure Ollama endpoint and select preferred models for AI generation features
 - **AI Status Indicator**: Visual toolbar indicator showing AI connection status (inactive, active, error, checking)
+- **Results Logging Panel**: Monitor AI interactions with timestamped log messages, copy and clear functionality
 
 ## Usage
 
@@ -196,6 +197,14 @@ To use Ollama from a remote server (such as a Mac on your local network):
    - **Red**: AI connection failed or model unavailable
    - **Orange (pulsing)**: Checking AI connection status
    - **Click to configure**: Opens AI Settings modal for easy setup
+7. **Results Panel**: Monitor AI interactions and system messages
+   - **Location**: Lower right panel, below the Preview
+   - **Displays**: Timestamped log messages from AI interactions
+   - **Message Types**: Info (blue), Success (green), Error (red), AI Response (purple)
+   - **Copy Button**: Copy all logged messages to clipboard for debugging or documentation
+   - **Clear Button**: Remove all messages from the log with confirmation
+   - **Persistence**: Messages are saved to localStorage and restored between sessions
+   - **Zen Mode**: Hidden in Zen Mode along with other UI elements, visible in Full Mode
 
 ### Exporting Your Work
 
@@ -220,12 +229,14 @@ Meta Editor includes a Jest-based test suite ensuring code quality and reliabili
 
 ### Test Coverage
 
-- **91 unit tests** covering all major functionality
+- **180+ unit tests** covering all major functionality
 - **Validation functions** - Input validation and formatting
 - **UI state management** - Zen mode, toolbar toggles, persistence
 - **Data transformation** - Preview generation, tag management, image extraction
 - **LocalStorage operations** - Data persistence and template management
 - **Menu actions** - All user interactions and workflows
+- **Results logging** - Message formatting, persistence, copy/clear operations
+- **21+ E2E tests** - Complete user workflows across browsers including Results panel interactions
 
 ### Running Tests
 

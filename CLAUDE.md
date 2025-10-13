@@ -117,13 +117,15 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - **Modular design**: Separate concerns for UI state, validation, data transformation, and storage
 
 ### Key Files
-- `dist/index.html` - Main application entry point with complete UI structure including Settings modal
-- `dist/script.js` - All application logic (~1100 lines of vanilla JavaScript) with AI settings functionality
+- `dist/index.html` - Main application entry point with complete UI structure including Settings modal and Results panel
+- `dist/script.js` - All application logic (~1200 lines of vanilla JavaScript) with AI settings and Results logging functionality
 - `dist/styles.css` - Main application styling with rem-based responsive design and modal components
 - `dist/menu-styles.css` - Menu bar and toolbar specific styles
-- `unit-tests/` - Comprehensive Jest test suite with 132+ unit tests including Settings functionality
+- `unit-tests/` - Comprehensive Jest test suite with 180+ unit tests including Settings and Results functionality
 - `unit-tests/settings.test.js` - Complete test coverage for AI settings, validation, and modal interactions
+- `unit-tests/results-logging.test.js` - Complete test coverage for Results logging system
 - `e2e-tests/` - Playwright E2E tests for cross-browser functionality validation
+- `e2e-tests/results-field.spec.js` - E2E tests for Results panel interactions
 - `playwright.config.js` - Playwright configuration for E2E testing
 - `mcp-server.json` - MCP (Model Context Protocol) server configuration
 
@@ -167,6 +169,39 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - **Endpoint Validation**: Real-time URL validation with user feedback
 - **Settings Persistence**: AI configuration saved to localStorage with error handling
 
+### Results Logging System
+The Results panel provides a logging mechanism for AI interactions and system messages:
+
+- **Purpose**: Monitor AI generation requests, responses, and errors in real-time
+- **Location**: Lower right panel, below Preview field
+- **Visibility**: Hidden in Zen Mode, visible in Full Mode
+- **Persistence**: Messages saved to localStorage and restored between sessions
+
+**Message Types:**
+- `info` - General information messages (blue styling)
+- `success` - Successful operations (green styling)
+- `error` - Error messages and failures (red styling)
+- `ai-response` - AI-generated content responses (purple styling)
+
+**API Usage:**
+```javascript
+// Append a message to Results panel
+appendToResults('AI model connection successful', 'success');
+appendToResults('Generating title options...', 'info');
+appendToResults('Failed to connect to Ollama', 'error');
+appendToResults('Generated title: "Understanding JavaScript Closures"', 'ai-response');
+
+// Messages are automatically timestamped and formatted
+// Format: [HH:MM:SS] Message text
+```
+
+**User Controls:**
+- Copy button - Copies all messages to clipboard
+- Clear button - Removes all messages (persists cleared state)
+- Auto-scroll - Automatically scrolls to newest messages
+
+**Storage Key:** `metaEditorResults` in localStorage
+
 ## Development Patterns
 
 ### Code Style
@@ -179,8 +214,8 @@ Simply open `dist/index.html` in a web browser - no build process or server requ
 - **Jest + jsdom** for unit testing with DOM simulation
 - **Playwright** for E2E testing across Chromium, Firefox, WebKit, and mobile browsers
 - **Comprehensive mocking** of browser APIs (FileReader, localStorage, clipboard)
-- **91+ unit tests** covering validation, UI state, data transformation, storage, and menu actions
-- **E2E test coverage** for complete user workflows and cross-browser compatibility
+- **180+ unit tests** covering validation, UI state, data transformation, storage, menu actions, and Results logging
+- **21+ E2E tests** for complete user workflows and cross-browser compatibility including Results panel
 - **Test isolation** with setup.js providing consistent mocks and cleanup
 
 ### UI Patterns
@@ -250,10 +285,12 @@ The MCP server enables AI-driven browser automation:
 - `localStorage.test.js` - Persistence operations
 - `menu-actions.test.js` - User interaction workflows
 - `settings.test.js` - AI settings functionality, modal interactions, and endpoint validation
+- `results-logging.test.js` - Results logging system, message formatting, and persistence
 - `setup.js` - Jest configuration and mocks
 
 #### E2E Tests (`e2e-tests/`)
 - `basic-functionality.spec.js` - Core application workflows
+- `results-field.spec.js` - Results panel interactions and message display
 - Test configuration in `playwright.config.js` with multi-browser support
 
 ### Mock Strategy

@@ -9,12 +9,21 @@ document.addEventListener('DOMContentLoaded', () => {
     // AI Status Elements
     const aiStatusBtn = document.getElementById('ai-status-btn');
     const aiStatusIcon = document.getElementById('ai-status-icon');
-    
+
+    // Results Elements
+    const resultsElement = document.getElementById('results');
+    const resultsHeader = document.querySelector('.results-header');
+    const copyResultsBtn = document.getElementById('copy-results-btn');
+    const clearResultsBtn = document.getElementById('clear-results-btn');
+
     // UI Element visibility state
     const uiState = {
         toolbar: true,
         zenMode: true
     };
+
+    // Results log array
+    let resultsLog = [];
     
     // Set initial status message
     statusMessage.textContent = 'Version 0.2';
@@ -106,6 +115,10 @@ document.addEventListener('DOMContentLoaded', () => {
     saveFooterTemplateBtn.addEventListener('click', saveFooterTemplate);
     loadFooterTemplateBtn.addEventListener('click', loadFooterTemplate);
 
+    // Results button event listeners
+    copyResultsBtn.addEventListener('click', copyResults);
+    clearResultsBtn.addEventListener('click', clearResults);
+
     // Update preview when any input changes
     const allInputs = [filenameInput, titleInput, dateInput, summaryInput, headerInput, contentInput, footerInput, imageFilenameInput, imageAltInput];
     allInputs.forEach(input => {
@@ -114,7 +127,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Load default templates if available
     checkForDefaultTemplates();
-    
+
+    // Load results from localStorage
+    loadResultsFromStorage();
+
     // Initial preview update
     updatePreview();
     
@@ -236,14 +252,155 @@ document.addEventListener('DOMContentLoaded', () => {
         // Check if we should auto-load default templates
         const savedHeader = localStorage.getItem('metaEditorHeaderTemplate');
         const savedFooter = localStorage.getItem('metaEditorFooterTemplate');
-        
+
         // Only auto-load if the fields are empty
         if (savedHeader && !headerInput.value.trim()) {
             headerInput.value = savedHeader;
         }
-        
+
         if (savedFooter && !footerInput.value.trim()) {
             footerInput.value = savedFooter;
+        }
+    }
+
+    // Results Logging Functions
+    function appendToResults(message, type = 'info') {
+        const timestamp = new Date();
+        const entry = {
+            timestamp,
+            message,
+            type
+        };
+
+        resultsLog.push(entry);
+
+        // Limit log to 100 most recent entries
+        if (resultsLog.length > 100) {
+            resultsLog.shift();
+        }
+
+        // Update display
+        updateResultsDisplay();
+
+        // Save to localStorage
+        saveResultsToStorage();
+
+        // Enable buttons if log has entries
+        updateResultsButtons();
+    }
+
+    function formatResultsMessage(entry) {
+        const timestamp = entry.timestamp;
+        const hours = String(timestamp.getHours()).padStart(2, '0');
+        const minutes = String(timestamp.getMinutes()).padStart(2, '0');
+        const seconds = String(timestamp.getSeconds()).padStart(2, '0');
+        const timeStr = `[${hours}:${minutes}:${seconds}]`;
+
+        const typeStr = entry.type.toUpperCase();
+        return `${timeStr} ${typeStr}: ${entry.message}`;
+    }
+
+    function updateResultsDisplay() {
+        if (resultsLog.length === 0) {
+            resultsElement.innerHTML = '<span class="results-placeholder">AI interaction logs will appear here...</span>';
+        } else {
+            resultsElement.innerHTML = resultsLog.map(entry => {
+                const formattedMessage = formatResultsMessage(entry);
+                return `<div class="log-entry log-${entry.type}">${formattedMessage}</div>`;
+            }).join('');
+
+            // Auto-scroll to bottom
+            resultsElement.scrollTop = resultsElement.scrollHeight;
+        }
+    }
+
+    function updateResultsButtons() {
+        const hasEntries = resultsLog.length > 0;
+        copyResultsBtn.disabled = !hasEntries;
+        clearResultsBtn.disabled = !hasEntries;
+    }
+
+    function clearResults() {
+        if (resultsLog.length === 0) return;
+
+        if (confirm('Are you sure you want to clear all results? This cannot be undone.')) {
+            resultsLog = [];
+            updateResultsDisplay();
+            updateResultsButtons();
+            saveResultsToStorage();
+        }
+    }
+
+    function copyResults() {
+        if (resultsLog.length === 0) return;
+
+        const text = resultsLog.map(entry => formatResultsMessage(entry)).join('\n');
+
+        navigator.clipboard.writeText(text).then(() => {
+            statusMessage.textContent = 'Results copied to clipboard!';
+            setTimeout(() => {
+                if (uiState.zenMode) {
+                    statusMessage.textContent = 'Zen Mode - Focus on writing';
+                } else {
+                    statusMessage.textContent = 'Version 0.2';
+                }
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy results:', err);
+            statusMessage.textContent = 'Failed to copy results';
+            setTimeout(() => {
+                if (uiState.zenMode) {
+                    statusMessage.textContent = 'Zen Mode - Focus on writing';
+                } else {
+                    statusMessage.textContent = 'Version 0.2';
+                }
+            }, 2000);
+        });
+    }
+
+    function saveResultsToStorage() {
+        try {
+            const serializedLog = resultsLog.map(entry => ({
+                timestamp: entry.timestamp.toISOString(),
+                message: entry.message,
+                type: entry.type
+            }));
+            localStorage.setItem('metaEditorResults', JSON.stringify(serializedLog));
+        } catch (error) {
+            console.error('Error saving results to localStorage:', error);
+            // If quota exceeded, clear old entries and try again
+            if (error.name === 'QuotaExceededError') {
+                resultsLog = resultsLog.slice(-50); // Keep only last 50 entries
+                try {
+                    const serializedLog = resultsLog.map(entry => ({
+                        timestamp: entry.timestamp.toISOString(),
+                        message: entry.message,
+                        type: entry.type
+                    }));
+                    localStorage.setItem('metaEditorResults', JSON.stringify(serializedLog));
+                } catch (retryError) {
+                    console.error('Failed to save results even after reducing size:', retryError);
+                }
+            }
+        }
+    }
+
+    function loadResultsFromStorage() {
+        try {
+            const saved = localStorage.getItem('metaEditorResults');
+            if (saved) {
+                const serializedLog = JSON.parse(saved);
+                resultsLog = serializedLog.map(entry => ({
+                    timestamp: new Date(entry.timestamp),
+                    message: entry.message,
+                    type: entry.type
+                }));
+                updateResultsDisplay();
+                updateResultsButtons();
+            }
+        } catch (error) {
+            console.error('Error loading results from localStorage:', error);
+            resultsLog = [];
         }
     }
 
@@ -906,7 +1063,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             toolbar.classList.add('hidden');
         }
-        
+
         // Apply zen mode state
         if (uiState.zenMode) {
             // Hide all form groups except content
@@ -917,13 +1074,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     group.style.display = 'none';
                 }
             });
-            
+
             // Hide the frontmatter header
             const frontmatterHeader = document.querySelector('.input-section h2');
             if (frontmatterHeader) {
                 frontmatterHeader.style.display = 'none';
             }
-            
+
+            // Hide Results section in Zen Mode
+            if (resultsElement) {
+                resultsElement.style.display = 'none';
+            }
+            if (resultsHeader) {
+                resultsHeader.style.display = 'none';
+            }
+
             statusMessage.textContent = 'Zen Mode - Focus on writing';
         } else {
             // Show all form groups
@@ -931,13 +1096,21 @@ document.addEventListener('DOMContentLoaded', () => {
             formGroups.forEach(group => {
                 group.style.display = '';
             });
-            
+
             // Show the frontmatter header
             const frontmatterHeader = document.querySelector('.input-section h2');
             if (frontmatterHeader) {
                 frontmatterHeader.style.display = '';
             }
-            
+
+            // Show Results section in Full Mode
+            if (resultsElement) {
+                resultsElement.style.display = '';
+            }
+            if (resultsHeader) {
+                resultsHeader.style.display = 'flex';
+            }
+
             if (statusMessage.textContent === 'Zen Mode - Focus on writing') {
                 statusMessage.textContent = 'Version 0.2';
             }
@@ -1136,11 +1309,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Validate individual components
         if (!validateServer(server)) {
             serverValidation.textContent = 'Please enter a valid server address (e.g., localhost, 192.168.1.100)';
+            appendToResults('Failed to fetch models: Invalid server address', 'error');
             return;
         }
 
         if (!validatePort(port)) {
             portValidation.textContent = 'Please enter a valid port number (1-65535)';
+            appendToResults('Failed to fetch models: Invalid port number', 'error');
             return;
         }
 
@@ -1148,6 +1323,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!endpoint) {
             fetchStatus.textContent = 'Invalid server configuration';
             fetchStatus.className = 'status-text error';
+            appendToResults('Failed to fetch models: Invalid server configuration', 'error');
             return;
         }
 
@@ -1157,6 +1333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchModelsBtn.disabled = true;
         fetchStatus.textContent = 'Fetching models...';
         fetchStatus.className = 'status-text loading';
+        appendToResults(`Fetching models from ${endpoint}...`, 'info');
 
         try {
             const response = await fetch(`${endpoint}/api/tags`, {
@@ -1184,6 +1361,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 modelSelectionGroup.style.display = 'none';
                 modelSelectionGroup.classList.add('disabled');
                 settingsSave.disabled = true;
+                appendToResults('No models found on Ollama instance', 'error');
                 return;
             }
 
@@ -1199,6 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modelSelectionGroup.classList.remove('disabled');
             fetchStatus.textContent = `Found ${models.length} model(s)`;
             fetchStatus.className = 'status-text success';
+            appendToResults(`Successfully fetched ${models.length} model(s) from ${endpoint}`, 'success');
 
             // Enable the Save button if a model is selected, otherwise keep it disabled
             settingsSave.disabled = !preferredModelSelect.value;
@@ -1216,6 +1395,7 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchStatus.className = 'status-text error';
             modelSelectionGroup.style.display = 'none';
             modelSelectionGroup.classList.add('disabled');
+            appendToResults(`Failed to fetch models: ${errorMessage}`, 'error');
 
             // Disable Save button when fetch fails
             settingsSave.disabled = true;
@@ -1246,11 +1426,13 @@ document.addEventListener('DOMContentLoaded', () => {
         // Validate individual components
         if (!validateServer(server)) {
             serverValidation.textContent = 'Please enter a valid server address';
+            appendToResults('Failed to save settings: Invalid server address', 'error');
             return;
         }
 
         if (!validatePort(port)) {
             portValidation.textContent = 'Please enter a valid port number (1-65535)';
+            appendToResults('Failed to save settings: Invalid port number', 'error');
             return;
         }
 
@@ -1259,6 +1441,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!endpoint) {
             fetchStatus.textContent = 'Invalid server configuration';
             fetchStatus.className = 'status-text error';
+            appendToResults('Failed to save settings: Invalid server configuration', 'error');
             return;
         }
 
@@ -1273,6 +1456,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeSettingsModal();
 
         statusMessage.textContent = 'Settings saved successfully';
+        appendToResults(`Settings saved: ${endpoint}, Model: ${aiSettings.preferredModel}`, 'success');
         setTimeout(() => {
             statusMessage.textContent = 'Version 0.2';
         }, 2000);
@@ -1293,12 +1477,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Show checking state with animation
         updateAIStatusIndicator('checking', 'AI Status: Checking...');
-        
+        appendToResults(`Checking AI status at ${aiSettings.ollamaEndpoint}...`, 'info');
+
         try {
             // Test endpoint connectivity with timeout
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000);
-            
+
             const response = await fetch(`${aiSettings.ollamaEndpoint}/api/tags`, {
                 method: 'GET',
                 mode: 'cors',
@@ -1308,41 +1493,49 @@ document.addEventListener('DOMContentLoaded', () => {
                 credentials: 'omit',
                 signal: controller.signal
             });
-            
+
             clearTimeout(timeoutId);
-            
+
             if (!response.ok) {
                 throw new Error(`Server returned ${response.status}: ${response.statusText}`);
             }
-            
+
             const data = await response.json();
             const models = data.models || [];
-            
+
             // Check if preferred model is available
             const modelAvailable = models.some(model => model.name === aiSettings.preferredModel);
-            
+
             if (modelAvailable) {
                 updateAIStatusIndicator('active', `AI Status: Connected (${aiSettings.preferredModel})`);
+                appendToResults(`AI connected: ${aiSettings.preferredModel} available at ${aiSettings.ollamaEndpoint}`, 'success');
             } else {
                 updateAIStatusIndicator('error', `AI Status: Model "${aiSettings.preferredModel}" not found`);
+                appendToResults(`AI model "${aiSettings.preferredModel}" not found at ${aiSettings.ollamaEndpoint}`, 'error');
             }
-            
+
         } catch (error) {
             console.error('AI status check failed:', error);
 
             // Provide more specific error messages
             let errorMessage = 'AI Status: Connection Failed';
+            let logMessage = 'AI connection failed';
             if (error.name === 'AbortError') {
                 errorMessage = 'AI Status: Connection Timeout';
+                logMessage = 'AI connection timeout';
             } else if (error.name === 'TypeError' && error.message.includes('Failed to fetch')) {
                 errorMessage = 'AI Status: CORS Error - Use local server';
+                logMessage = 'AI connection failed: CORS error (use local server)';
             } else if (error.message.includes('CORS')) {
                 errorMessage = 'AI Status: CORS Error - Use local server';
+                logMessage = 'AI connection failed: CORS error (use local server)';
             } else if (error.message.includes('Failed to fetch')) {
                 errorMessage = 'AI Status: Cannot Reach Server';
+                logMessage = `AI connection failed: Cannot reach ${aiSettings.ollamaEndpoint}`;
             }
 
             updateAIStatusIndicator('error', errorMessage);
+            appendToResults(logMessage, 'error');
         }
     }
 

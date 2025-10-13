@@ -10,6 +10,7 @@ This document tracks active development work, immediate priorities, and backlog 
 ## In Progress 🚧
 
 ### AI Generation Dialog
+- [x] Add a "Results" read only field in the lower right under the "Preview" field and display the output of the AI interactions in that field -- basically a "log viewer" for the AI interactions.
 - [ ] Create modal dialog component for AI generation responses
 - [ ] Add "Generate" button to toolbar for quick access
 - [ ] Design UI for multiple AI-generated options (titles, summaries, etc.)
@@ -121,6 +122,14 @@ This document tracks active development work, immediate priorities, and backlog 
 ---
 
 ## Recently Completed ✅
+
+### Results Logging Field (v0.2.2)
+- [x] Results panel for AI interaction logging
+- [x] Message type support (info, success, error, ai-response)
+- [x] Copy and clear functionality with user feedback
+- [x] Zen Mode visibility control
+- [x] Session persistence via localStorage
+- [x] Comprehensive test coverage (32 unit tests, E2E tests)
 
 ### AI Status Indicator (v0.2.1)
 - [x] Visual status monitoring with robot icon
